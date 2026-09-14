@@ -24,9 +24,10 @@
   --ifm-color-primary-light: #d75a49;
   --ifm-color-primary-lighter: #df6d5e;
   --ifm-color-primary-lightest: #eca397;
-  --ifm-background-color: #ffffff;
-  --ifm-background-surface-color: #ffffff;
-  --ifm-font-color-base: var(--oci-ink);
+  --ifm-background-color: var(--oci-ink);
+  --ifm-background-surface-color: #1e1c1a;
+  --ifm-font-color-base: #f8f7f5;
+  --ifm-navbar-height: 4.5rem;
   --ifm-code-font-size: 95%;
   --docusaurus-highlighted-code-line-bg: rgba(0, 0, 0, 0.1);
 }
@@ -50,13 +51,42 @@
 }
 
 .navbar__title,
-.navbar__link,
 .navbar__toggle,
 .navbar .clean-btn {
   color: #ffffff;
 }
 
+.navbar__brand { gap: 0.65rem; }
+
+.navbar__title { font-size: 1rem; font-weight: 700; }
+
+.navbar__link {
+  position: relative;
+  padding: 0.75rem 0.85rem;
+  color: #918d89;
+  font-size: 0.92rem;
+  transition: color 160ms ease;
+}
+
+.navbar__link::after {
+  content: '';
+  position: absolute;
+  right: 0.85rem;
+  bottom: 0.28rem;
+  left: 0.85rem;
+  height: 2px;
+  background: var(--oci-terracotta);
+  transform: scaleX(0);
+  transform-origin: center;
+  transition: transform 160ms ease;
+}
+
+.navbar__link:hover { color: #b5b0aa; }
+
 .navbar__link--active,
-.navbar__link:hover {
-  color: var(--oci-terracotta);
+.navbar__link--active:hover { color: #ffffff; }
+
+.navbar__link:hover::after,
+.navbar__link--active::after {
+  transform: scaleX(1);
 }
