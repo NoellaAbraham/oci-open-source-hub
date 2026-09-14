@@ -6,25 +6,57 @@
 
 /* You can override the default Infima variables here. */
 :root {
-  --ifm-color-primary: #2e8555;
-  --ifm-color-primary-dark: #29784c;
-  --ifm-color-primary-darker: #277148;
-  --ifm-color-primary-darkest: #205d3b;
-  --ifm-color-primary-light: #33925d;
-  --ifm-color-primary-lighter: #359962;
-  --ifm-color-primary-lightest: #3cad6e;
+  --oci-ink: #161513;
+  --oci-charcoal: #312d2a;
+  --oci-terracotta: #c74634;
+  --oci-teal: #31a09c;
+  --oci-green: #508223;
+  --oci-gold: #a88e00;
+  --oci-blue: #3a84a6;
+  --oci-header-background: var(--oci-ink);
+  --ifm-navbar-background-color: var(--oci-header-background);
+  --ifm-navbar-link-color: #ffffff;
+  --ifm-navbar-link-hover-color: var(--oci-terracotta);
+  --ifm-color-primary: var(--oci-terracotta);
+  --ifm-color-primary-dark: #b33b2b;
+  --ifm-color-primary-darker: #9e3325;
+  --ifm-color-primary-darkest: #82291e;
+  --ifm-color-primary-light: #d75a49;
+  --ifm-color-primary-lighter: #df6d5e;
+  --ifm-color-primary-lightest: #eca397;
+  --ifm-background-color: #ffffff;
+  --ifm-background-surface-color: #ffffff;
+  --ifm-font-color-base: var(--oci-ink);
   --ifm-code-font-size: 95%;
   --docusaurus-highlighted-code-line-bg: rgba(0, 0, 0, 0.1);
 }
 
 /* For readability concerns, you should choose a lighter palette in dark mode. */
 [data-theme='dark'] {
-  --ifm-color-primary: #25c2a0;
-  --ifm-color-primary-dark: #21af90;
-  --ifm-color-primary-darker: #1fa588;
-  --ifm-color-primary-darkest: #1a8870;
-  --ifm-color-primary-light: #29d5b0;
-  --ifm-color-primary-lighter: #32d8b4;
-  --ifm-color-primary-lightest: #4fddbf;
+  --ifm-color-primary: #df6d5e;
+  --ifm-color-primary-dark: var(--oci-terracotta);
+  --ifm-color-primary-darker: #b33b2b;
+  --ifm-color-primary-darkest: #82291e;
+  --ifm-color-primary-light: #e98578;
+  --ifm-color-primary-lighter: #efa297;
+  --ifm-color-primary-lightest: #f6c9c2;
+  --ifm-background-color: var(--oci-ink);
+  --ifm-background-surface-color: var(--oci-charcoal);
   --docusaurus-highlighted-code-line-bg: rgba(0, 0, 0, 0.3);
+}
+.navbar {
+  background-color: var(--oci-header-background);
+  border-bottom: 1px solid var(--oci-charcoal);
+}
+
+.navbar__title,
+.navbar__link,
+.navbar__toggle,
+.navbar .clean-btn {
+  color: #ffffff;
+}
+
+.navbar__link--active,
+.navbar__link:hover {
+  color: var(--oci-terracotta);
 }
