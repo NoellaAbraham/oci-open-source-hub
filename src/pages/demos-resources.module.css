@@ -3,18 +3,40 @@
 .header h1 { margin: 0; color: var(--site-text); font-size: clamp(2.25rem, 3.5vw, 3.5rem); font-weight: 400; line-height: 1; }
 .header p { max-width: 620px; margin: 1.25rem 0 0; color: var(--site-muted); font-size: clamp(1.05rem, 1.6vw, 1.25rem); line-height: 1.5; }
 .catalog { padding: 2.5rem clamp(1.25rem, 4vw, 5rem) 5rem; }
-.tabs { margin-bottom: 2.75rem; display: flex; flex-wrap: wrap; gap: 0.5rem 1.8rem; border-bottom: 1px solid var(--site-border); }
+.catalogControls { margin-bottom: 2rem; display: flex; align-items: flex-start; gap: 1.25rem; border-bottom: 1px solid var(--site-border); }
+.tabs { flex: 1; margin: 0; display: flex; flex-wrap: wrap; gap: 0.5rem 1.8rem; }
 .tabs button { padding: 0 0 0.95rem; color: var(--site-muted); border: 0; border-bottom: 2px solid transparent; background: transparent; cursor: pointer; font: inherit; font-size: 0.95rem; }
-.tabs button:hover { color: var(--site-text); border-bottom-color: var(--oci-terracotta); }
-.tabs .activeTab { color: var(--site-text); border-bottom-color: var(--oci-terracotta); }
-.grid { display: grid; grid-template-columns: repeat(3, 1fr); }
-.card { min-height: 230px; padding: 2rem; display: flex; flex-direction: column; border: 1px solid var(--site-border); outline: 1px solid transparent; outline-offset: -1px; transition: outline-color 180ms ease; }
-.card:hover { outline-color: var(--oci-terracotta); }
-.type { margin: 0; color: var(--oci-terracotta); font-size: 0.8rem; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; }
-.card h2 { margin: 1rem 0 0; color: var(--site-text); font-size: 1.2rem; line-height: 1.3; }
-.card p:not(.type) { margin: 1rem 0; color: var(--site-muted); font-size: 0.95rem; line-height: 1.55; }
-.card a, .comingSoon { margin-top: auto; color: var(--site-text); font-size: 0.88rem; font-weight: 700; text-decoration: none; }
-.card a:hover { color: var(--oci-terracotta); text-decoration: none; }
+.tabs button:hover, .tabs .activeTab { color: var(--site-text); border-bottom-color: var(--oci-terracotta); }
+.filterWrap { position: relative; flex: 0 0 auto; }
+.filterButton { padding: 0.55rem 0.9rem; border: 1px solid var(--site-border); background: transparent; color: var(--site-text); cursor: pointer; font: inherit; font-size: 0.85rem; }
+.filterButton:hover { border-color: var(--oci-terracotta); color: var(--oci-terracotta); }
+.filterMenu { width: 300px; max-width: calc(100vw - 2.5rem); position: absolute; z-index: 2; top: calc(100% + 0.5rem); right: 0; left: auto; padding: 1rem; border: 1px solid var(--site-border); background: var(--oci-ink); box-shadow: 0 0.75rem 2rem rgba(0, 0, 0, 0.28); }
+.filterMenu p { margin: 0 0 0.75rem; color: var(--site-text); font-size: 0.9rem; font-weight: 700; }
+.filterMenu label { display: flex; align-items: center; gap: 0.6rem; padding: 0.38rem 0; color: var(--site-muted); cursor: pointer; font-size: 0.84rem; }
+.filterMenu input { accent-color: var(--oci-terracotta); }
+.filterMenu button { margin-top: 0.75rem; padding: 0; border: 0; background: transparent; color: var(--oci-terracotta); cursor: pointer; font: inherit; font-size: 0.82rem; }
+.grid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); align-items: start; gap: 1.5rem; }
+.card { height: 280px; min-height: 0; display: flex; flex-direction: column; overflow: hidden; border: 1px solid var(--site-border); transition: border-color 180ms ease, transform 180ms ease; }
+.card:hover { border-color: var(--oci-terracotta); transform: translateY(-3px); }
+.cardContent { flex: 1; padding: 1.5rem; display: flex; flex-direction: column; }
+.cardTopline { display: flex; align-items: center; justify-content: space-between; gap: 1rem; color: var(--site-muted); font-size: 0.78rem; }
+.serviceTag { text-align: right; }
+.serviceTag::before { content: ''; width: 0.45rem; height: 0.45rem; margin-right: 0.45rem; display: inline-block; border-radius: 50%; background: var(--oci-terracotta); }
+.card h2 { margin: 1.4rem 0 1.25rem; color: var(--site-text); font-size: 1.2rem; line-height: 1.25; }
+.card p { margin: 0; color: var(--site-muted); font-size: 0.95rem; line-height: 1.5; }
+.exploreLink, .comingSoon { margin-top: auto; padding-top: 1.5rem; color: var(--site-text); font-size: 0.85rem; font-weight: 700; text-decoration: none; }
+.exploreLink:hover { color: var(--oci-terracotta); text-decoration: none; }
 .comingSoon { color: var(--site-subtle); }
-@media (max-width: 900px) { .grid { grid-template-columns: repeat(2, 1fr); } }
-@media (max-width: 600px) { .catalog { padding-bottom: 3rem; } .tabs { gap: 0.75rem 1.25rem; } .grid { grid-template-columns: 1fr; } .card { min-height: 210px; } }
+.videoFrame { height: 132px; flex: 0 0 132px; position: relative; display: grid; place-items: center; overflow: hidden; border-bottom: 1px solid var(--site-border); background: var(--site-card); }
+.videoFrame img { width: 100%; height: 100%; object-fit: cover; }
+.playButton { width: 2.6rem; height: 2.6rem; position: absolute; display: grid; place-items: center; border: 1px solid #fff; border-radius: 50%; background: rgba(0, 0, 0, 0.36); }
+.playButton::before { content: ''; margin-left: 0.14rem; border-top: 0.31rem solid transparent; border-bottom: 0.31rem solid transparent; border-left: 0.48rem solid #fff; }
+.videoFrame:hover .playButton { border-color: var(--oci-terracotta); background: var(--oci-terracotta); }
+.videoCard .cardContent { min-height: 0; padding: 0.8rem 1rem; }
+.videoCard .cardTopline { display: none; }
+.videoCard h2 { margin: 0 0 0.45rem; font-size: 1rem; }
+.videoCard p { display: -webkit-box; overflow: hidden; -webkit-line-clamp: 1; -webkit-box-orient: vertical; font-size: 0.82rem; }
+.videoCard .exploreLink { padding-top: 0.6rem; }
+@media (max-width: 1100px) { .grid { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
+@media (max-width: 900px) { .grid { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+@media (max-width: 600px) { .catalog { padding-bottom: 3rem; } .catalogControls { display: block; } .tabs { margin-bottom: 1.25rem; gap: 0.75rem 1.25rem; border-bottom: 1px solid var(--site-border); } .grid { grid-template-columns: 1fr; } .card { height: 280px; } }

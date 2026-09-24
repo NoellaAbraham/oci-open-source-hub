@@ -6,5 +6,5 @@ export const latestReport = {
   readOnlinePath: '/reports/mysql-heatwave-june-2026',
   slidesUrl: 'https://speakerdeck.com/freshdaz/mysql-and-mysql-heatwave-report-june-2026',
   pdfUrl: '/reports/mysql-heatwave-report-june-2026.pdf',
-  tags: ['mysql', 'heatwave', 'database', 'report'],
+  tags: ['mysql-heatwave'],
 };

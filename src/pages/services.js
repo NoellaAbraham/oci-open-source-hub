@@ -33,7 +33,7 @@ export default function Services() {
           {serviceCategories.map((category) => <button key={category.id} type="button" role="tab" aria-selected={activeCategory === category.id} className={activeCategory === category.id ? styles.activeTab : ''} onClick={() => setActiveCategory(category.id)}>{category.label}</button>)}
         </div>
         <div className={styles.grid}>
-          {visibleServices.map((service) => <article key={service.name} className={styles.card}><span className={styles.marker} style={{backgroundImage: `url(${service.image || serviceIcons[service.name] || ''})`}} aria-hidden="true" /><h2>{service.name}</h2><p>{service.description}</p><span className={styles.learn}>Learn More &#8594;</span></article>)}
+          {visibleServices.map((service) => <article key={service.name} className={styles.card}><span className={styles.marker} style={{backgroundImage: `url(${service.image || serviceIcons[service.name] || ''})`}} aria-hidden="true" /><h2>{service.name}</h2><p>{service.description}</p>{service.url ? <a className={styles.learn} href={service.url} target="_blank" rel="noreferrer">Explore service &#8594;</a> : <span className={styles.learn}>Learn More &#8594;</span>}</article>)}
         </div>
       </section>
     </main>

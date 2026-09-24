@@ -8,7 +8,7 @@ export const coachingSessions = [
     title: 'Airport Chatbot Demo',
     speaker: 'Piotr Kurzynoga, Irine Benoy',
     focus: 'Cloud Infrastructure',
-    tags: ['oci-postgresql', 'oci-generative-ai', 'oci-dataflow', 'oci-streaming'],
+    tags: ['oci-database-with-postgresql', 'oci-streaming'],
   },
   {
     id: 'oci-postgresql-logs-with-grafana',
@@ -16,7 +16,7 @@ export const coachingSessions = [
     title: ' Integration of OCI PostgreSQL Logs with Grafana',
     speaker: 'Irine Benoy',
     focus: 'Cloud Infrastructure',
-    tags: ['oci-postgresql', 'grafana'],
+    tags: ['oci-database-with-postgresql'],
   },
   {
     id: 'security-best-practices',
@@ -24,7 +24,7 @@ export const coachingSessions = [
     title: 'Cross-Reference Code Mapping System With Opensearch',
     speaker: 'Ismaël Hassane, Irine Benoy',
     focus: 'Cloud Infrastructure',
-    tags: ['oci-opensearch', 'open-source', 'best-practices', 'medical'],
+    tags: ['oci-search-with-opensearch'],
   },
   {
     id: 'real-time-insights-anomaly-detection',
@@ -32,7 +32,7 @@ export const coachingSessions = [
     title: 'Real-Time Insights and Anomaly Detection in ATM transactions',
     speaker: 'Sylwester Dec, Robert de Laat',
     focus: 'Cloud Infrastructure',
-    tags: ['oci-postgresql', 'oci-streaming', 'oci-dataflow', 'delta-lake', 'open-source'],
+    tags: ['oci-database-with-postgresql', 'oci-streaming', 'oci-data-flow'],
   },
   {
     id: 'real-time-iot-master',
@@ -40,6 +40,6 @@ export const coachingSessions = [
     title: 'Real-Time IoT Master',
     speaker: 'Piotr Kurzynoga',
     focus: 'Cloud Infrastructure',
-    tags: ['oci-postgresql', 'oci-streaming-with-kafka', 'oci-dataflow', 'open-source'],
+    tags: ['oci-database-with-postgresql', 'oci-streaming-with-apache-kafka', 'oci-data-flow'],
   },  
 ];

@@ -10,7 +10,7 @@ export const serviceCategories = [
 // description, and image. Put the image in static/img/services/ first, then
 // use a path such as image: '/img/services/my-service.png'.
 export const services = [
-  {name: 'OCI Database with PostgreSQL', categories: ['databases'], description: 'Build and run reliable PostgreSQL databases on OCI without managing the underlying infrastructure. Scale as your workload grows, with built-in backups, security, and high availability.'},
+  {name: 'OCI Database with PostgreSQL', categories: ['databases'], description: 'Build and run reliable PostgreSQL databases on OCI without managing the underlying infrastructure. Scale as your workload grows, with built-in backups, security, and high availability.', url: 'https://phantompete.github.io/OCIPostgreSQLShowcase/'},
   {name: 'MySQL HeatWave', categories: ['databases'], description: 'A unified MySQL service for transactions, analytics and AI workloads—built to help teams run and scale modern applications on OCI without managing the underlying infrastructure.'},
   {name: 'OCI Cache', categories: ['databases'], description: 'A managed, Redis-compatible in-memory data store for caching frequent queries, session data, and real-time application data with low latency.'},
   {name: 'OCI Search with OpenSearch', categories: ['databases', 'search'], description: 'Managed OpenSearch clusters for indexing application logs, searching large datasets, and building dashboards that surface errors, latency, and service health.'},
