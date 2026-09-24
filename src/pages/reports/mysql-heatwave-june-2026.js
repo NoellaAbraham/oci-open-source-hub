@@ -1,5 +1,5 @@
-import Link from '@docusaurus/Link';
 import Layout from '@theme/Layout';
+import {latestReport} from '@site/src/data/latestReport';
 import styles from './mysql-heatwave-june-2026.module.css';
 
 const reportSections = [
@@ -50,21 +50,21 @@ const reportSections = [
 export default function MySqlHeatWaveJune2026Report() {
   return (
     <Layout
-      title="MySQL & MySQL HeatWave Report - June 2026"
+      title="MySQL HeatWave Report - June 2026"
       description="A native web edition of the MySQL and MySQL HeatWave Report for June 2026.">
       <main className={styles.reportPage}>
         <header className={styles.hero}>
           <div className={styles.heroInner}>
-            <Link className={styles.backLink} to="/">&#8592; Back to Open Source Hub</Link>
-            <p className={styles.eyebrow}>Oracle Cloud Open Source Report</p>
-            <h1>MySQL &amp; MySQL<br />HeatWave Report</h1>
+            <h1>MySQL &amp; MySQL HeatWave Report</h1>
             <p className={styles.date}>June 2026</p>
-            <p className={styles.intro}>An overview of the MySQL 9.7 LTS and MySQL HeatWave 9.7 release, covering core database improvements, cloud operations, security, and GenAI capabilities.</p>
-            <div className={styles.actions}>
-              <a href="/reports/mysql-heatwave-report-june-2026.pdf" download>Download PDF &#8594;</a>
-              <a href="https://speakerdeck.com/freshdaz/mysql-and-mysql-heatwave-report-june-2026" target="_blank" rel="noreferrer">View Slides</a>
+            <div className={styles.heroDetails}>
+              <p className={styles.intro}>An overview of the MySQL 9.7 LTS and MySQL HeatWave 9.7 release, covering core database improvements, cloud operations, security, and GenAI capabilities.</p>
             </div>
             <p className={styles.author}>Prepared by Olivier Dasini, Cloud AI &amp; Analytics Solutions Architect</p>
+            <div className={styles.actions}>
+              <a href={latestReport.pdfUrl} download>Download PDF &#8594;</a>
+              <a href={latestReport.slidesUrl} target="_blank" rel="noreferrer">View Slides</a>
+            </div>
           </div>
         </header>
 

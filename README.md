@@ -1,6 +1,6 @@
-# Website
+# OCI Open Source Hub
 
-This website is built using [Docusaurus](https://docusaurus.io/), a modern static website generator.
+This website is the Oracle Cloud open source hub. To update reports, services, and demos through GitHub, follow `CONTENT_UPDATES.md`.
 
 ## Installation
 

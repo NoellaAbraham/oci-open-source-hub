@@ -6,16 +6,25 @@
 
 /* You can override the default Infima variables here. */
 :root {
-  --oci-ink: #161513;
-  --oci-charcoal: #312d2a;
   --oci-terracotta: #c74634;
   --oci-teal: #31a09c;
   --oci-green: #508223;
   --oci-gold: #a88e00;
   --oci-blue: #3a84a6;
-  --oci-header-background: var(--oci-ink);
+  --site-surface: #faf9f7;
+  --site-surface-raised: #ffffff;
+  --site-card: #ffffff;
+  --site-text: #211f1d;
+  --site-muted: #625d58;
+  --site-subtle: #817b75;
+  --site-border: #dedbd7;
+  --site-nav-link: #625d58;
+  --site-nav-hover: #211f1d;
+  --oci-ink: var(--site-surface);
+  --oci-charcoal: var(--site-border);
+  --oci-header-background: var(--site-surface-raised);
   --ifm-navbar-background-color: var(--oci-header-background);
-  --ifm-navbar-link-color: #ffffff;
+  --ifm-navbar-link-color: var(--site-nav-link);
   --ifm-navbar-link-hover-color: var(--oci-terracotta);
   --ifm-color-primary: var(--oci-terracotta);
   --ifm-color-primary-dark: #b33b2b;
@@ -25,8 +34,8 @@
   --ifm-color-primary-lighter: #df6d5e;
   --ifm-color-primary-lightest: #eca397;
   --ifm-background-color: var(--oci-ink);
-  --ifm-background-surface-color: #1e1c1a;
-  --ifm-font-color-base: #f8f7f5;
+  --ifm-background-surface-color: var(--site-surface-raised);
+  --ifm-font-color-base: var(--site-text);
   --ifm-navbar-height: 4.5rem;
   --ifm-code-font-size: 95%;
   --docusaurus-highlighted-code-line-bg: rgba(0, 0, 0, 0.1);
@@ -34,6 +43,18 @@
 
 /* For readability concerns, you should choose a lighter palette in dark mode. */
 [data-theme='dark'] {
+  --site-surface: #161513;
+  --site-surface-raised: #1d1b19;
+  --site-card: #211f1d;
+  --site-text: #ffffff;
+  --site-muted: #aaa49f;
+  --site-subtle: #7e7974;
+  --site-border: #302e2b;
+  --site-nav-link: #918d89;
+  --site-nav-hover: #b5b0aa;
+  --oci-ink: var(--site-surface);
+  --oci-charcoal: var(--site-border);
+  --oci-header-background: var(--site-surface);
   --ifm-color-primary: #df6d5e;
   --ifm-color-primary-dark: var(--oci-terracotta);
   --ifm-color-primary-darker: #b33b2b;
@@ -53,7 +74,7 @@
 .navbar__title,
 .navbar__toggle,
 .navbar .clean-btn {
-  color: #ffffff;
+  color: var(--site-text);
 }
 
 .navbar__brand { gap: 0.65rem; }
@@ -63,7 +84,7 @@
 .navbar__link {
   position: relative;
   padding: 0.75rem 0.85rem;
-  color: #918d89;
+  color: var(--site-nav-link);
   font-size: 0.92rem;
   transition: color 160ms ease;
 }
@@ -81,10 +102,10 @@
   transition: transform 160ms ease;
 }
 
-.navbar__link:hover { color: #b5b0aa; }
+.navbar__link:hover { color: var(--site-nav-hover); }
 
 .navbar__link--active,
-.navbar__link--active:hover { color: #ffffff; }
+.navbar__link--active:hover { color: var(--site-text); }
 
 .navbar__link:hover::after,
 .navbar__link--active::after {

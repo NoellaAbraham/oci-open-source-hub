@@ -11,8 +11,7 @@ import {themes as prismThemes} from 'prism-react-renderer';
 /** @type {import('@docusaurus/types').Config} */
 const config = {
   title: 'Oracle Open Source Hub',
-  tagline: 'Dinosaurs are cool',
-  favicon: 'img/favicon.ico',
+  tagline: 'Open source technologies on Oracle Cloud Infrastructure',
 
   // Future flags, see https://docusaurus.io/docs/api/docusaurus-config#future
   future: {
@@ -45,28 +44,8 @@ const config = {
       'classic',
       /** @type {import('@docusaurus/preset-classic').Options} */
       ({
-        docs: {
-          sidebarPath: './sidebars.js',
-          // Please change this to your repo.
-          // Remove this to remove the "edit this page" links.
-          editUrl:
-            'https://github.com/facebook/docusaurus/tree/main/packages/create-docusaurus/templates/shared/',
-        },
-        blog: {
-          showReadingTime: true,
-          feedOptions: {
-            type: ['rss', 'atom'],
-            xslt: true,
-          },
-          // Please change this to your repo.
-          // Remove this to remove the "edit this page" links.
-          editUrl:
-            'https://github.com/facebook/docusaurus/tree/main/packages/create-docusaurus/templates/shared/',
-          // Useful options to enforce blogging best practices
-          onInlineTags: 'warn',
-          onInlineAuthors: 'warn',
-          onUntruncatedBlogPosts: 'warn',
-        },
+        docs: false,
+        blog: false,
         theme: {
           customCss: './src/css/custom.css',
         },
@@ -77,8 +56,7 @@ const config = {
   themeConfig:
     /** @type {import('@docusaurus/preset-classic').ThemeConfig} */
     ({
-      // Replace with your project's social card
-      image: 'img/docusaurus-social-card.jpg',
+      image: 'img/zoo.png',
       colorMode: {
         defaultMode: 'dark',
         disableSwitch: true,
@@ -92,6 +70,7 @@ const config = {
             to: '/',
             label: 'Home',
             position: 'right',
+            exact: true,
           },
           {
             to: '/about',
@@ -104,7 +83,7 @@ const config = {
             position: 'right',
           },
           {
-            to: '/reports/mysql-heatwave-june-2026',
+            to: '/reports',
             label: 'Reports',
             position: 'right',
           },
@@ -119,46 +98,16 @@ const config = {
         style: 'dark',
         links: [
           {
-            title: 'Docs',
+            title: 'OCI Open Source Hub',
             items: [
-              {
-                label: 'Tutorial',
-                to: '/docs/intro',
-              },
-            ],
-          },
-          {
-            title: 'Community',
-            items: [
-              {
-                label: 'Stack Overflow',
-                href: 'https://stackoverflow.com/questions/tagged/docusaurus',
-              },
-              {
-                label: 'Discord',
-                href: 'https://discordapp.com/invite/docusaurus',
-              },
-              {
-                label: 'X',
-                href: 'https://x.com/docusaurus',
-              },
-            ],
-          },
-          {
-            title: 'More',
-            items: [
-              {
-                label: 'Blog',
-                to: '/blog',
-              },
               {
                 label: 'GitHub',
-                href: 'https://github.com/facebook/docusaurus',
+                href: 'https://github.com/oracle',
               },
             ],
           },
         ],
-        copyright: `Copyright © ${new Date().getFullYear()} My Project, Inc. Built with Docusaurus.`,
+        copyright: 'Copyright © 2026 Oracle Corporation · <a href="https://www.google.com/search?sca_esv=918fcbc529497425&rlz=1C1GCEA_en__1197AE1197&sxsrf=APpeQnvvz8wob1LPlxgkgSSlYv8GznKtKg:1790154874630&q=Austin,+Texas&si=APenkKl9jifxeC9ibQ_x4MSQwI5Umgo7WEBmeB2VLefJQEpIweKlLGDwuMq5vkXaLEdVe3Fs-UvTka9YOTdB_lXi9WPanukOe0J5lLkoOIbm1SXD1Q8Fo97oZN0Yb3vN4ftnVa5_Yamkr8KfrVDFx6-pBuithim-upI04YoYHHN753P4rMIaT1fMw5Hw2OFGfD7sdmXrx613&sa=X&ved=2ahUKEwjVo5TLroSXAxUS0gIHHeEqFHEQmxN6BAgeEAI" target="_blank" rel="noreferrer">Austin, Texas, United States</a>',
       },
       prism: {
         theme: prismThemes.github,
