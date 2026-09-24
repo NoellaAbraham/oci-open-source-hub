@@ -1,9 +1,11 @@
 import Link from '@docusaurus/Link';
+import useBaseUrl from '@docusaurus/useBaseUrl';
 import Layout from '@theme/Layout';
 import {reports} from '@site/src/data/reports';
 import styles from './index.module.css';
 
 export default function ReportsPage() {
+  const baseUrl = useBaseUrl('/');
   return (
     <Layout title="Reports" description="Quarterly Oracle Cloud open source reports.">
       <main className={styles.page}>
@@ -24,7 +26,7 @@ export default function ReportsPage() {
               </div>
               <div className={styles.actions}>
                 <Link to={report.readOnlinePath}>Read Online</Link>
-                <a href={report.pdfUrl} download>PDF</a>
+                <a href={`${baseUrl}${report.pdfUrl.replace(/^\//, '')}`} download>PDF</a>
                 <a href={report.slidesUrl} target="_blank" rel="noreferrer">Slides</a>
               </div>
             </article>

@@ -1,4 +1,5 @@
 import Link from '@docusaurus/Link';
+import useBaseUrl from '@docusaurus/useBaseUrl';
 import Layout from '@theme/Layout';
 import {coachingSessions} from '@site/src/data/coachingSessions';
 import {openSourceHighlights} from '@site/src/data/openSourceHighlights';
@@ -6,6 +7,7 @@ import {latestReport} from '@site/src/data/latestReport';
 import styles from './index.module.css';
 
 export default function Home() {
+  const reportPdfUrl = useBaseUrl(latestReport.pdfUrl);
   const featuredSessions = coachingSessions.slice(0, 4);
   const hasMoreSessions = coachingSessions.length > 4;
   const featuredHighlights = openSourceHighlights.slice(0, 3);
@@ -124,7 +126,7 @@ export default function Home() {
                   <Link to={latestReport.readOnlinePath}>Read Online</Link>
                 ) : <span>Read Online</span>}
                 {latestReport.pdfUrl ? (
-                  <a href={latestReport.pdfUrl} target="_blank" rel="noreferrer">Download PDF <span aria-hidden="true">&#8594;</span></a>
+                  <a href={reportPdfUrl} target="_blank" rel="noreferrer">Download PDF <span aria-hidden="true">&#8594;</span></a>
                 ) : <span>Download PDF <span aria-hidden="true">&#8594;</span></span>}
                 {latestReport.slidesUrl ? (
                   <a href={latestReport.slidesUrl} target="_blank" rel="noreferrer">View Slides</a>

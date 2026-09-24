@@ -1,4 +1,5 @@
 import Layout from '@theme/Layout';
+import useBaseUrl from '@docusaurus/useBaseUrl';
 import {latestReport} from '@site/src/data/latestReport';
 import styles from './mysql-heatwave-june-2026.module.css';
 
@@ -48,6 +49,7 @@ const reportSections = [
 ];
 
 export default function MySqlHeatWaveJune2026Report() {
+  const reportPdfUrl = useBaseUrl(latestReport.pdfUrl);
   return (
     <Layout
       title="MySQL HeatWave Report - June 2026"
@@ -62,7 +64,7 @@ export default function MySqlHeatWaveJune2026Report() {
             </div>
             <p className={styles.author}>Prepared by Olivier Dasini, Cloud AI &amp; Analytics Solutions Architect</p>
             <div className={styles.actions}>
-              <a href={latestReport.pdfUrl} download>Download PDF &#8594;</a>
+              <a href={reportPdfUrl} download>Download PDF &#8594;</a>
               <a href={latestReport.slidesUrl} target="_blank" rel="noreferrer">View Slides</a>
             </div>
           </div>

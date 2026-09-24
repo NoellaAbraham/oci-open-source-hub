@@ -1,4 +1,5 @@
 import {useEffect, useRef} from 'react';
+import useBaseUrl from '@docusaurus/useBaseUrl';
 import Layout from '@theme/Layout';
 import styles from './about.module.css';
 
@@ -34,6 +35,7 @@ const team = [
 ];
 
 export default function AboutPage() {
+  const zooImage = useBaseUrl('img/zoo.png');
   const carouselRef = useRef(null);
   const moveCarousel = (direction) => {
     const viewport = carouselRef.current;
@@ -69,7 +71,7 @@ export default function AboutPage() {
                 <h1>About Us</h1>
                 <p className={styles.lead}>We are a team of technologists and open source enthusiasts helping customers succeed with open source technologies on OCI.</p>
               </div>
-              <img className={styles.heroImage} src="/img/zoo.png" alt="Open source technology zoo" />
+              <img className={styles.heroImage} src={zooImage} alt="Open source technology zoo" />
             </div>
             <div className={styles.focusGrid}>
               {focusAreas.map((area) => (
