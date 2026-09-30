@@ -6,7 +6,7 @@ export const openSourceHighlights = [
     title: 'Vector Search with OCI Cache',
     description: 'Reference implementation for integrating vector search capabilities with OCI caching.',
     meta: 'OCI Cache',
-    url: 'https://github.com/oracle-devrel/technology-engineering/blob/main/oci-and-db/database/open-source-data-platforms/oci-cache/code-examples/vector-search/files/oci_cache_valkey_search.ipynb',
+    url: 'https://github.com/oracle-devrel/technology-engineering/blob/main/oci-and-db/cloud-native/open-source-data-platforms/oci-cache/code-examples/vector-search/files/oci_cache_valkey_search.ipynb',
     tags: ['oci-cache'],
   },
   {

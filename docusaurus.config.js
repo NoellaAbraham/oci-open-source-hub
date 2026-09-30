@@ -98,11 +98,19 @@ const config = {
         style: 'dark',
         links: [
           {
-            title: 'OCI Open Source Hub',
+            title: 'Links',
             items: [
               {
                 label: 'GitHub',
-                href: 'https://github.com/oracle',
+                href: 'https://github.com/oracle-devrel/technology-engineering/tree/main/oci-and-db/cloud-native/open-source-data-platforms',
+              },
+              {
+                label: 'YouTube',
+                href: 'https://www.youtube.com/channel/UCdDhYMT2USoLdh4SZIsu_1g',
+              },
+              {
+                label: 'Code of Conduct',
+                href: 'https://community.oracle.com/hub/kb/articles/1-oracle-community-integrity-policy',
               },
             ],
           },

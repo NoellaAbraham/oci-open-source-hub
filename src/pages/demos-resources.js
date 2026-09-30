@@ -14,12 +14,16 @@ export default function DemosResources() {
     type: 'Developer coaching session',
     description: `${session.speaker} · ${session.focus}`,
     url: `https://www.youtube.com/watch?v=${session.youtubeId}`,
-    publishedAt: null,
+    publishedAt: session.publishedAt,
   }));
   const visibleItems = [...demosResources, ...videoItems]
     .filter((item) => activeCategory === 'all' || item.category === activeCategory)
     .filter((item) => selectedTags.length === 0 || selectedTags.some((tag) => item.tags.includes(tag)))
-    .sort((first, second) => new Date(second.publishedAt || 0) - new Date(first.publishedAt || 0));
+    .sort((first, second) => {
+      const firstDate = first.publishedAt || first.updatedAt;
+      const secondDate = second.publishedAt || second.updatedAt;
+      return new Date(secondDate || 0) - new Date(firstDate || 0);
+    });
 
   function toggleTag(tag) {
     setSelectedTags((currentTags) => currentTags.includes(tag)
