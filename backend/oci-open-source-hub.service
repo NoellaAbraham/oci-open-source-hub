@@ -1,0 +1,21 @@
+[Unit]
+Description=OCI Open Source Hub collaborator admin backend
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=simple
+User=ubuntu
+Group=ubuntu
+WorkingDirectory=/home/ubuntu/oci-open-source-hub/backend
+EnvironmentFile=/etc/oci-open-source-hub.env
+Environment=NODE_ENV=production
+ExecStart=/usr/bin/node server.mjs
+Restart=on-failure
+RestartSec=3
+NoNewPrivileges=true
+PrivateTmp=true
+UMask=0077
+
+[Install]
+WantedBy=multi-user.target
