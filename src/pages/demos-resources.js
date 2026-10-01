@@ -1,4 +1,4 @@
-import {useState} from 'react';
+import {useEffect, useState} from 'react';
 import Layout from '@theme/Layout';
 import {demoResourceCategories, demosResources, resourceServiceTags} from '@site/src/data/demosResources';
 import {coachingSessions} from '@site/src/data/coachingSessions';
@@ -8,6 +8,7 @@ export default function DemosResources() {
   const [activeCategory, setActiveCategory] = useState('all');
   const [selectedTags, setSelectedTags] = useState([]);
   const [filterOpen, setFilterOpen] = useState(false);
+  const [showBackToTop, setShowBackToTop] = useState(false);
   const videoItems = coachingSessions.map((session) => ({
     ...session,
     category: 'demo',
@@ -24,6 +25,18 @@ export default function DemosResources() {
       const secondDate = second.publishedAt || second.updatedAt;
       return new Date(secondDate || 0) - new Date(firstDate || 0);
     });
+
+  useEffect(() => {
+    const updateBackToTop = () => setShowBackToTop(window.scrollY > 400);
+    updateBackToTop();
+    window.addEventListener('scroll', updateBackToTop, {passive: true});
+    return () => window.removeEventListener('scroll', updateBackToTop);
+  }, []);
+
+  function scrollToTop() {
+    const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    window.scrollTo({top: 0, behavior: reducedMotion ? 'auto' : 'smooth'});
+  }
 
   function toggleTag(tag) {
     setSelectedTags((currentTags) => currentTags.includes(tag)
@@ -60,23 +73,24 @@ export default function DemosResources() {
           </div>
           {visibleItems.length > 0 && <div className={styles.grid}>
             {visibleItems.map((item) => (
-              <article className={`${styles.card} ${item.category === 'demo' ? styles.videoCard : ''}`} key={item.id}>
-                {item.category === 'demo' && <a className={styles.videoFrame} href={item.url} target="_blank" rel="noreferrer" aria-label={`Play ${item.title} on YouTube`}>
+              <a className={`${styles.card} ${item.category === 'demo' ? styles.videoCard : ''}`} key={item.id} href={item.url} target="_blank" rel="noopener noreferrer">
+                {item.category === 'demo' && <div className={styles.videoFrame}>
                   <img src={`https://i.ytimg.com/vi/${item.youtubeId}/maxresdefault.jpg`} alt="" /><span className={styles.playButton} aria-hidden="true" />
-                </a>}
+                </div>}
                 <div className={styles.cardContent}>
                   <div className={styles.cardTopline}>
                     <span>{item.type}</span>
                     <span className={styles.serviceTag}>{item.tags.map((tag) => resourceServiceTags[tag]).join(' · ')}</span>
                   </div>
                   <h2>{item.title}</h2><p>{item.description}</p>
-                  {item.url ? <a className={styles.exploreLink} href={item.url} target="_blank" rel="noreferrer">Explore <span aria-hidden="true">→</span></a> : <span className={styles.comingSoon}>Coming soon</span>}
+                  <span className={styles.srOnly}>Opens in a new tab</span>
                 </div>
-              </article>
+              </a>
             ))}
           </div>}
         </section>
       </main>
+      {showBackToTop && <button className={styles.backToTop} type="button" onClick={scrollToTop} aria-label="Back to top" title="Back to top">↑</button>}
     </Layout>
   );
 }
