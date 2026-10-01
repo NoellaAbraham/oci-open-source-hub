@@ -1,4 +1,4 @@
-import {useState} from 'react';
+import {useEffect, useState} from 'react';
 import useBaseUrl from '@docusaurus/useBaseUrl';
 import Layout from '@theme/Layout';
 import {serviceCategories, services} from '@site/src/data/services';
@@ -28,10 +28,38 @@ const logoAccents = {
   'OCI Big Data': '#4d36df',
 };
 
+function ServiceCard({service, baseUrl}) {
+  const Card = service.url ? 'a' : 'article';
+  const linkProps = service.url ? {href: service.url, target: '_blank', rel: 'noopener noreferrer'} : {};
+
+  return <Card className={styles.card} {...linkProps}>
+    <span className={styles.logoBlock} style={{'--logo-accent': logoAccents[service.name]}} aria-hidden="true">
+      <span className={`${styles.marker} ${service.name === 'OCI Streaming with Apache Kafka' ? styles.lightLogo : ''} ${service.name === 'OCI Search with OpenSearch' ? styles.brightLogo : ''}`} style={{backgroundImage: `url(${baseUrl}${(service.image || serviceIcons[service.name] || '').replace(/^\//, '')})`}} />
+      <span className={styles.logoAccent} />
+    </span>
+    <h2>{service.name}{service.url && <span className={styles.srOnly}> (opens in a new tab)</span>}</h2>
+    <p>{service.description}</p>
+  </Card>;
+}
+
 export default function Services() {
   const [activeCategory, setActiveCategory] = useState('all');
+  const [showBackToTop, setShowBackToTop] = useState(false);
   const baseUrl = useBaseUrl('/');
   const visibleServices = activeCategory === 'all' ? services : services.filter((service) => service.categories.includes(activeCategory));
+
+  useEffect(() => {
+    const updateBackToTop = () => setShowBackToTop(window.scrollY > 400);
+    updateBackToTop();
+    window.addEventListener('scroll', updateBackToTop, {passive: true});
+    return () => window.removeEventListener('scroll', updateBackToTop);
+  }, []);
+
+  function scrollToTop() {
+    const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    window.scrollTo({top: 0, behavior: reducedMotion ? 'auto' : 'smooth'});
+  }
+
   return <Layout title="Services" description="Oracle Cloud managed open source services.">
     <main className={styles.page}>
       <header className={styles.hero}>
@@ -48,9 +76,10 @@ export default function Services() {
           </div>
         </div>
         <div className={styles.grid}>
-          {visibleServices.map((service) => <article key={service.name} className={styles.card}><span className={styles.logoBlock} style={{'--logo-accent': logoAccents[service.name]}} aria-hidden="true"><span className={`${styles.marker} ${service.name === 'OCI Streaming with Apache Kafka' ? styles.lightLogo : ''} ${service.name === 'OCI Search with OpenSearch' ? styles.brightLogo : ''}`} style={{backgroundImage: `url(${baseUrl}${(service.image || serviceIcons[service.name] || '').replace(/^\//, '')})`}} /><span className={styles.logoAccent} /></span><h2>{service.name}</h2><p>{service.description}</p>{service.url ? <a className={styles.learn} href={service.url} target="_blank" rel="noreferrer">Explore service &#8594;</a> : <span className={styles.learn}>Learn More &#8594;</span>}</article>)}
+          {visibleServices.map((service) => <ServiceCard key={service.name} service={service} baseUrl={baseUrl} />)}
         </div>
       </section>
     </main>
+    {showBackToTop && <button className={styles.backToTop} type="button" onClick={scrollToTop} aria-label="Back to top" title="Back to top">↑</button>}
   </Layout>;
 }
