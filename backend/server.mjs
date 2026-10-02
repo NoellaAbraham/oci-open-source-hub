@@ -38,15 +38,17 @@ function equalSecret(a, b) {
 }
 
 function send(response, status, body, type = 'text/html; charset=utf-8', headers = {}) {
+  const content = String(body);
   response.writeHead(status, {
     'Content-Type': type,
+    'Content-Length': Buffer.byteLength(content),
     'Cache-Control': 'no-store',
     'X-Content-Type-Options': 'nosniff',
     'Content-Security-Policy': "default-src 'none'; style-src 'unsafe-inline'; form-action 'self'; base-uri 'none'; frame-ancestors 'none'",
     'Referrer-Policy': 'no-referrer',
     ...headers,
   });
-  response.end(body);
+  response.end(content);
 }
 
 function redirect(response, location, headers = {}) {
@@ -73,8 +75,10 @@ async function github(path, token, options = {}) {
   });
   const data = await response.json().catch(() => ({}));
   if (!response.ok) {
-    const error = new Error(`GitHub returned ${response.status}`);
+    const detail = typeof data.message === 'string' ? `: ${data.message}` : '';
+    const error = new Error(`GitHub returned ${response.status}${detail}`);
     error.status = response.status;
+    error.githubRequestId = response.headers.get('x-github-request-id');
     throw error;
   }
   return data;
@@ -160,15 +164,19 @@ async function createServicePullRequest(operation, name, updated, session, catal
   const {repoPath, base, original} = catalog;
   const baseRef = await github(`${repoPath}/git/ref/heads/${encodeURIComponent(base)}`, session.token);
   const branch = `${operation}-service/${Date.now()}-${randomBytes(4).toString('hex')}`;
+  console.log(`[pull-request] creating branch ${branch} for ${session.login}`);
   await github(`${repoPath}/git/refs`, session.token, {method: 'POST', body: JSON.stringify({ref: `refs/heads/${branch}`, sha: baseRef.object.sha})});
+  console.log(`[pull-request] updating service catalog on ${branch}`);
   await github(`${repoPath}/contents/src/data/services.js`, session.token, {
     method: 'PUT',
     body: JSON.stringify({message: `${operation === 'add' ? 'Add' : 'Remove'} ${name} service`, content: Buffer.from(updated).toString('base64'), sha: original.sha, branch}),
   });
+  console.log(`[pull-request] opening pull request from ${branch} into ${base}`);
   const pull = await github(`${repoPath}/pulls`, session.token, {
     method: 'POST',
     body: JSON.stringify({title: `${operation === 'add' ? 'Add' : 'Remove'} service: ${name}`, head: branch, base, body: `Submitted through the OCI Open Source Hub by @${session.login}.\n\nPlease review before merging.`}),
   });
+  console.log(`[pull-request] created ${pull.html_url}`);
   return pull.html_url;
 }
 
@@ -237,8 +245,17 @@ async function handler(request, response) {
       } catch (error) {
         return send(response, 400, serviceForm(session, testServices(catalog.content), error.message));
       }
-      const pullUrl = await createServicePullRequest(operation, name, updated, session, catalog);
-      return send(response, 201, page('Submitted', `<h1>${operation === 'add' ? 'Service' : 'Test service removal'} submitted</h1><p>Your proposal is ready for review. The website will update only after the pull request is merged and deployed.</p><a class="button" href="${escapeHtml(pullUrl)}">View pull request</a>`));
+      let pullUrl;
+      try {
+        pullUrl = await createServicePullRequest(operation, name, updated, session, catalog);
+      } catch (error) {
+        console.error(`[pull-request] failed for ${session.login}:`, error);
+        const requestId = error.githubRequestId ? ` GitHub request ID: ${error.githubRequestId}.` : '';
+        return send(response, 502, serviceForm(session, testServices(catalog.content), `The pull request could not be created. ${error.message}.${requestId}`));
+      }
+      // A normal 200 response with an explicit Content-Length is the most reliable
+      // response shape when this service is proxied through OCI API Gateway.
+      return send(response, 200, page('Submitted', `<h1>${operation === 'add' ? 'Service' : 'Test service removal'} submitted</h1><p>Your proposal is ready for review. The website will update only after the pull request is merged and deployed.</p><a class="button" href="${escapeHtml(pullUrl)}">View pull request</a>`));
     }
   }
   return send(response, 404, page('Not found', '<h1>Not found</h1>'));
@@ -250,8 +267,9 @@ if (!config.origin?.startsWith('https://') || !config.clientId || !config.client
 }
 
 createServer((request, response) => {
+  console.log(`[request] ${request.method} ${request.url}`);
   handler(request, response).catch((error) => {
-    console.error(error);
+    console.error(`[request] ${request.method} ${request.url} failed:`, error);
     if (!response.headersSent) send(response, 500, page('Server error', '<h1>Something went wrong</h1><p>Please try again later.</p>'));
   });
 }).listen(config.port, '0.0.0.0', () => console.log(`Admin backend listening on port ${config.port}`));
