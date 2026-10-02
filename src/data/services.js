@@ -19,4 +19,5 @@ export const services = [
   {name: 'OCI Streaming with Apache Kafka', categories: ['streaming'], description: 'Build real-time data pipelines with fully managed Apache Kafka on OCI.', url: 'https://www.oracle.com/cloud/apache-kafka/'},
   {name: 'OCI Data Flow', categories: ['big-data'], description: 'Process large datasets and run ETL jobs with managed Apache Spark.', url: 'https://docs.oracle.com/en-us/iaas/Content/data-flow/using/home.htm'},
   {name: 'OCI Big Data', categories: ['big-data'], description: 'Run Hadoop and Spark clusters to prepare large datasets for analytics.', url: 'https://www.oracle.com/big-data/big-data-service/'},
+  {"name":"[TEST] Workflow Smoke Test","categories":["databases"],"description":"Temporary check of the collaborator service proposal workflow.","url":"https://example.com"},
 ];
