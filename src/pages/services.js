@@ -66,6 +66,7 @@ export default function Services() {
         <div className={styles.heroCopy}>
           <h1>Services</h1>
           <p>Explore Oracle Cloud managed open source services. Production-ready, scalable, and secure.</p>
+          <a className={styles.collaboratorLink} href="https://github.com/NoellaAbraham/oci-open-source-hub/actions/workflows/propose-service.yml">Collaborators: propose a service</a>
         </div>
         <img className={styles.heroImage} src={`${baseUrl}img/zoo.png`} alt="Open source technology zoo" />
       </header>

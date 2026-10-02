@@ -3,6 +3,8 @@
 .heroCopy { min-width: 0; }
 .hero h1 { margin: 0; color: var(--site-text); font-size: clamp(2.25rem, 3.5vw, 3.5rem); font-weight: 400; line-height: 1; }
 .hero p { max-width: 620px; margin: 1.25rem 0 0; color: var(--site-muted); font-size: clamp(1.05rem, 1.6vw, 1.25rem); line-height: 1.5; }
+.hero .collaboratorLink { display: inline-flex; align-items: center; margin-top: 1.25rem; padding: 0.75rem 1.1rem; color: #fff; background: var(--oci-terracotta); font-weight: 700; text-decoration: none; }
+.hero .collaboratorLink:hover, .hero .collaboratorLink:focus-visible { color: #fff; background: #a93425; text-decoration: none; }
 .heroImage { width: min(100%, 440px); max-height: 185px; justify-self: end; object-fit: contain; }
 .catalog { padding: 2.5rem clamp(1.25rem, 4vw, 5rem) 5rem; }
 .catalogControls { margin-bottom: 2.75rem; display: flex; align-items: baseline; gap: 1rem; border-bottom: 1px solid var(--site-border); }

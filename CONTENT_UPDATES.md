@@ -2,6 +2,14 @@
 
 Only repository collaborators can make these changes. Put new source material into the matching `*-to-add` folder first. On GitHub, open the relevant data file, choose **Edit**, make the change, then use **Commit changes**. The website is rebuilt after the change is merged into the publishing branch.
 
+## Propose a service from the website
+
+1. On the Services page, choose **Collaborators: propose a service**. GitHub requires write access to this repository before someone can run the workflow.
+2. Choose **Run workflow**, fill in the service name, category, description, and optional URL or existing logo path, then submit. The workflow validates the entry and opens a pull request; it does not publish the service immediately.
+3. The repository owner reviews and merges the pull request. The Pages deployment then rebuilds the site and publishes the service.
+
+Enable **Require review from Code Owners** in the `main` branch ruleset to enforce owner review before merging.
+
 ## Add a report
 
 1. Upload the PDF to `static/reports/` and any cover image to `static/img/reports/`.
