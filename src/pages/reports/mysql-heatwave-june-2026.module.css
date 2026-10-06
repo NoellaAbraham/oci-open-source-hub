@@ -28,4 +28,5 @@
 .reportSection li::before { content: ''; position: absolute; top: 0.55rem; left: 0; width: 0.4rem; height: 0.4rem; border-radius: 50%; background: var(--oci-terracotta); }
 .community { padding: clamp(3.5rem, 7vw, 6rem) 1.5rem; background: var(--site-surface-raised); border-top: 1px solid var(--site-border); }
 .community p:last-child { max-width: 760px; }
+@media screen and (max-width: 1050px) { .hero h1 { white-space: normal; text-wrap: balance; } }
 @media screen and (max-width: 760px) { .hero { padding-top: 3rem; } .hero h1 { font-size: clamp(2.2rem, 10vw, 3rem); white-space: normal; } .actions { width: 100%; flex-direction: row; flex-wrap: wrap; } .summaryGrid { grid-template-columns: 1fr; } .summaryGrid article { min-height: 0; } .reportSection { grid-template-columns: 1fr; gap: 0.8rem; } }

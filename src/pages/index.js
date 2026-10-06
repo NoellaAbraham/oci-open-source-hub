@@ -3,11 +3,14 @@ import useBaseUrl from '@docusaurus/useBaseUrl';
 import Layout from '@theme/Layout';
 import {coachingSessions} from '@site/src/data/coachingSessions';
 import {openSourceHighlights} from '@site/src/data/openSourceHighlights';
-import {latestReport} from '@site/src/data/latestReport';
+import {reports} from '@site/src/data/reports';
 import styles from './index.module.css';
 
 export default function Home() {
+  const latestReport = reports[0];
   const reportPdfUrl = useBaseUrl(latestReport.pdfUrl);
+  const reportReadOnlineUrl = useBaseUrl(latestReport.readOnlinePath);
+  const reportCoverUrl = useBaseUrl(latestReport.coverImage);
   const featuredSessions = coachingSessions.slice(0, 4);
   const hasMoreSessions = coachingSessions.length > 4;
   const featuredHighlights = openSourceHighlights.slice(0, 3);
@@ -120,10 +123,12 @@ export default function Home() {
             <div className={styles.reportContent}>
               <p className={styles.reportEyebrow}>Latest Report</p>
               <h2>{latestReport.title}</h2>
-              <p className={styles.reportDescription}>{latestReport.description}</p>
+              <p className={styles.reportDescription}>{latestReport.description || latestReport.summary}</p>
               <div className={styles.reportActions}>
                 {latestReport.readOnlinePath ? (
-                  <Link to={latestReport.readOnlinePath}>Read Online</Link>
+                  latestReport.staticHtml
+                    ? <a href={reportReadOnlineUrl}>Read Online</a>
+                    : <Link to={latestReport.readOnlinePath}>Read Online</Link>
                 ) : <span>Read Online</span>}
                 {latestReport.pdfUrl ? (
                   <a href={reportPdfUrl} target="_blank" rel="noreferrer">Download PDF <span aria-hidden="true">&#8594;</span></a>
@@ -134,7 +139,7 @@ export default function Home() {
               </div>
             </div>
             <div className={styles.reportCover}>
-              {latestReport.coverImage ? <img src={latestReport.coverImage} alt={`${latestReport.title} cover`} /> : <span>Latest<br />Report</span>}
+              {latestReport.coverImage ? <img src={reportCoverUrl} alt={`${latestReport.title} cover`} /> : <span>Latest<br />Report</span>}
             </div>
           </div>
         </section>

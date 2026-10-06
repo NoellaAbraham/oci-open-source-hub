@@ -14,23 +14,35 @@ export default function ReportsPage() {
           <p>Quarterly reports covering key enhancements and updates.</p>
         </header>
         <section className={styles.list} aria-label="Available reports">
-          {reports.map((report) => (
-            <article className={styles.report} key={report.readOnlinePath}>
-              <Link className={styles.cover} to={report.readOnlinePath} aria-label={`Read ${report.title}`}>
-                <img src={report.coverImage} alt={`${report.title} cover`} />
-              </Link>
+          {reports.map((report) => {
+            const readOnlineHref = `${baseUrl}${report.readOnlinePath.replace(/^\//, '')}`;
+            const coverImage = /^https?:\/\//.test(report.coverImage)
+              ? report.coverImage
+              : `${baseUrl}${report.coverImage.replace(/^\//, '')}`;
+            const pdfIsExternal = /^https?:\/\//.test(report.pdfUrl);
+            const pdfHref = pdfIsExternal
+              ? report.pdfUrl
+              : `${baseUrl}${report.pdfUrl.replace(/^\//, '')}`;
+            const ReadOnlineLink = ({className, children, ...props}) => report.staticHtml
+              ? <a className={className} href={readOnlineHref} {...props}>{children}</a>
+              : <Link className={className} to={report.readOnlinePath} {...props}>{children}</Link>;
+
+            return <article className={styles.report} key={report.readOnlinePath}>
+              <ReadOnlineLink className={styles.cover} aria-label={`Read ${report.title}`}>
+                <img src={coverImage} alt={`${report.title} cover`} />
+              </ReadOnlineLink>
               <div className={styles.details}>
-                <h2><Link to={report.readOnlinePath}>{report.title}</Link></h2>
+                <h2><ReadOnlineLink>{report.title}</ReadOnlineLink></h2>
                 <p className={styles.period}>{report.period}</p>
                 <p className={styles.summary}>{report.summary}</p>
               </div>
               <div className={styles.actions}>
-                <Link to={report.readOnlinePath}>Read Online</Link>
-                <a href={`${baseUrl}${report.pdfUrl.replace(/^\//, '')}`} download>PDF</a>
+                <ReadOnlineLink>Read Online</ReadOnlineLink>
+                <a href={pdfHref} {...(pdfIsExternal ? {target: '_blank', rel: 'noreferrer'} : {download: true})}>PDF</a>
                 <a href={report.slidesUrl} target="_blank" rel="noreferrer">Slides</a>
               </div>
-            </article>
-          ))}
+            </article>;
+          })}
         </section>
       </main>
     </Layout>

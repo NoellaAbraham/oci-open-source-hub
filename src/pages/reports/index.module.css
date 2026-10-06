@@ -1,8 +1,8 @@
 .page { min-height: calc(100vh - var(--ifm-navbar-height)); padding: clamp(2.5rem, 6vw, 5rem) clamp(1.25rem, 4vw, 5rem) 5rem; background: var(--oci-ink); color: var(--site-text); }
-.header { width: 100%; margin: 0; padding-bottom: clamp(2rem, 4vw, 3.5rem); border-bottom: 1px solid var(--site-border); }
+.header { width: min(100%, 1320px); margin: 0 auto; padding-bottom: clamp(2rem, 4vw, 3.5rem); border-bottom: 1px solid var(--site-border); }
 .header h1 { margin: 0; color: var(--site-text); font-size: clamp(2.25rem, 3.5vw, 3.5rem); font-weight: 400; line-height: 1; }
 .header p { max-width: 620px; margin: 1.25rem 0 0; color: var(--site-muted); font-size: clamp(1.05rem, 1.6vw, 1.25rem); line-height: 1.5; }
-.list { width: 100%; margin: 0; }
+.list { width: min(100%, 1320px); margin: 0 auto; }
 .report { padding: clamp(2rem, 4vw, 3rem) 0; display: grid; grid-template-columns: 220px minmax(0, 1fr) auto; align-items: center; gap: clamp(1.5rem, 4vw, 3.5rem); border-bottom: 1px solid var(--site-border); }
 .cover { width: 220px; aspect-ratio: 16 / 6; display: block; overflow: hidden; }
 .cover img { width: 100%; height: 100%; display: block; object-fit: cover; object-position: center top; transition: transform 180ms ease; }

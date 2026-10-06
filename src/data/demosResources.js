@@ -141,7 +141,125 @@ export const demosResources = [
   {id: 'kafka-schema-registry-akhq', category: 'github', type: 'GitHub repository', title: 'Kafka Schema Registry and AKHQ', description: 'Schema Registry and AKHQ setup guide for Apache Kafka.', url: 'https://github.com/oracle-devrel/technology-engineering/blob/main/oci-and-db/cloud-native/open-source-data-platforms/oci-streaming-with-apache-kafka/code-examples/schema-registry-akhq-setup/schema-registry.md', tags: ['oci-streaming-with-apache-kafka']},
   {id: 'streaming-fake-producer-consumer', category: 'github', type: 'GitHub repository', title: 'OCI Streaming: Fake Producer and Consumer', description: 'Sample producer and consumer for OCI Streaming.', url: 'https://github.com/oracle-devrel/technology-engineering/tree/main/oci-and-db/cloud-native/open-source-data-platforms/oci-streaming/code-examples/fake-producer-consumer', tags: ['oci-streaming']},
   {id: 'streaming-mosquitto-node-red', category: 'github', type: 'GitHub repository', title: 'OCI Streaming: Mosquitto and Node-RED', description: 'Connect Mosquitto and Node-RED with OCI Streaming.', url: 'https://github.com/oracle-devrel/technology-engineering/tree/main/oci-and-db/cloud-native/open-source-data-platforms/oci-streaming/code-examples/mosquitto_node-red', tags: ['oci-streaming']},
+  {
+    id: 'article-postgresql-time-series-node', category: 'article', type: 'Medium article', title: 'Setting Up a Time-Series Node for OCI Database with PostgreSQL',
+    creator: 'Andriy Dorokhin',
+    url: 'https://medium.com/@andreumdorokhinum/setting-up-a-time-series-node-for-oci-database-with-postgresql-db1283a6fec8', tags: ['oci-database-with-postgresql'], publishedAt: '2026-08-19',
+  },
+  {
+    id: 'article-cache-heatwave-better-together', category: 'article', type: 'Blog article', title: 'OCI Cache and MySQL HeatWave: Better Together for High-Performance Applications',
+    creator: 'Olivier Dasini',
+    url: 'https://dasini.net/blog/2026/07/21/oci-cache-and-mysql-heatwave-better-together-for-high-performance-applications/', tags: ['oci-cache', 'mysql-heatwave'], publishedAt: '2026-07-21',
+  },
+  {
+    id: 'article-postgresql-kerberos', category: 'article', type: 'Medium article', title: 'Setting up Kerberos Auth for OCI Database with PostgreSQL',
+    creator: 'Andriy Dorokhin',
+    url: 'https://medium.com/@andreumdorokhinum/setting-up-kerberos-auth-for-oci-database-with-postgresql-51e9a235975b', tags: ['oci-database-with-postgresql'], publishedAt: '2026-06-26',
+  },
+  {
+    id: 'article-postgresql-avdf', category: 'article', type: 'Medium article', title: 'Integration of OCI Database with PostgreSQL and Oracle Audit Vault and Database Firewall',
+    creator: 'Andriy Dorokhin and Thomas Minne',
+    url: 'https://medium.com/@andreumdorokhinum/integration-of-oci-database-with-postgresql-and-oracle-audit-vault-and-database-firewall-f98236b980bd', tags: ['oci-database-with-postgresql'], publishedAt: '2026-06-03',
+  },
+  {
+    id: 'article-postgresql-boyer-moore-horspool', category: 'article', type: 'Medium article', title: 'Does Postgres need the Boyer-Moore-Horspool search algorithm for LIKE operator?',
+    creator: 'Andriy Dorokhin',
+    url: 'https://medium.com/@andreumdorokhinum/does-postgres-need-the-boyer-moore-horspool-search-algorithm-for-like-operator-00b43e4b115c', tags: ['oci-database-with-postgresql'], publishedAt: '2026-05-15',
+  },
+  {
+    id: 'article-benchmark-oci-postgresql', category: 'article', type: 'Medium article', title: 'Benchmarking OCI Database with PostgreSQL',
+    creator: 'Andriy Dorokhin',
+    url: 'https://medium.com/@andreumdorokhinum/benchmarking-oci-database-with-postgresql-0a665e575fde', tags: ['oci-database-with-postgresql'], publishedAt: '2025-11-07',
+  },
+  {
+    id: 'article-cache-redis-valkey', category: 'article', type: 'Medium article', title: 'Upgrade OCI Cache with Redis to Valkey',
+    creator: 'Piotr Kurzynoga',
+    url: 'https://medium.com/@devpiotrekk/upgrade-oci-cache-with-redis-to-valkey-d3c01deb8733', tags: ['oci-cache'], publishedAt: '2025-08-13',
+  },
+  {
+    id: 'article-postgresql-rclone-migration', category: 'article', type: 'Medium article', title: 'Migrate PostgreSQL to OCI PostgreSQL using OCI Object Storage and Rclone',
+    creator: 'Sylwester Dec',
+    url: 'https://medium.com/@sylwekdec/migrate-postgresql-to-oci-postgresql-using-oci-object-storage-and-rclone-a61ef97c5b96', tags: ['oci-database-with-postgresql'], publishedAt: '2025-06-25',
+  },
+  {
+    id: 'article-data-flow-energy-prediction', category: 'article', type: 'Medium article', title: 'Predict energy consumption with OCI Data Flow and Spark MLlib',
+    creator: 'Sylwester Dec',
+    url: 'https://medium.com/@sylwekdec/predict-energy-consumption-with-oci-data-flow-and-spark-mllib-74626c4db56a', tags: ['oci-data-flow'], publishedAt: '2025-04-22',
+  },
+  {
+    id: 'article-data-flow-real-time-ingestion', category: 'article', type: 'Medium article', title: 'Ingest real time data with Spark, OCI Data Flow and OCI Data Lake',
+    creator: 'Sylwester Dec',
+    url: 'https://medium.com/@sylwekdec/ingest-real-time-data-with-spark-oci-data-flow-and-oci-data-lake-cdff7619b4ec', tags: ['oci-data-flow', 'oci-streaming'], publishedAt: '2025-04-08',
+  },
+  {
+    id: 'article-data-flow-autonomous-database', category: 'article', type: 'Medium article', title: 'Apache Spark with OCI Data Flow and Oracle Autonomous Database',
+    creator: 'Sylwester Dec',
+    url: 'https://medium.com/@sylwekdec/apache-spark-with-oci-data-flow-and-oracle-autonomous-database-bd96055445ee', tags: ['oci-data-flow'], publishedAt: '2025-04-07',
+  },
+  {
+    id: 'article-database-synergy-day-2025', category: 'article', type: 'Medium article', title: 'Database Synergy Day 2025 — Things left unsaid…',
+    creator: 'Piotr Kurzynoga',
+    url: 'https://medium.com/@devpiotrekk/database-synergy-day-2025-things-left-unsaid-07b9891454a5', tags: ['oci-database-with-postgresql', 'oci-streaming-with-apache-kafka', 'oci-data-flow'], publishedAt: '2025-04-03',
+  },
+  {
+    id: 'database-synergy-day-2025-demo-code', category: 'github', type: 'GitHub repository', title: 'Database Synergy Day 2025: Demo Code',
+    description: 'Code accompanying Piotr Kurzynoga’s PostgreSQL, Kafka, and Spark demo.',
+    url: 'https://github.com/phantompete/SOUG_2025_PUB', tags: ['oci-database-with-postgresql', 'oci-streaming-with-apache-kafka', 'oci-data-flow'],
+  },
+  {
+    id: 'article-postgresql-pglogical', category: 'article', type: 'Medium article', title: 'Replicating OCI Database with PostgreSQL using pglogical',
+    creator: 'Piotr Kurzynoga',
+    url: 'https://medium.com/@devpiotrekk/replicating-oci-database-with-postgresql-using-pglogical-118182ff08f9', tags: ['oci-database-with-postgresql'], publishedAt: '2024-09-27',
+  },
+  {
+    id: 'article-postgresql-goldengate-cross-region', category: 'article', type: 'Medium article', title: 'OCI PostgreSQL to OCI PostgreSQL cross-region replication with OCI GoldenGate',
+    creator: 'Piotr Kurzynoga',
+    url: 'https://medium.com/@devpiotrekk/oci-postgresql-to-oci-postgresql-cross-region-replication-with-oci-goldengate-introduction-e0492fc37b92', tags: ['oci-database-with-postgresql'], publishedAt: '2024-09-29',
+  },
+  {
+    id: 'architecture-bitbucket-opensearch-postgresql', category: 'diagram', type: 'Architecture Center', title: 'Deploy Atlassian Bitbucket Data Center on OCI with Managed OpenSearch and PostgreSQL',
+    url: 'https://docs.oracle.com/en/solutions/deploy-bitbucket-oci/#GUID-D5ADF584-AFB8-4087-97F3-4EC8FF5E687D', tags: ['oci-database-with-postgresql', 'oci-search-with-opensearch'],
+  },
+  {
+    id: 'architecture-modern-app-postgresql-cache-opensearch', category: 'diagram', type: 'Architecture Center', title: 'Modernize Your Application Development with OCI-Managed PostgreSQL, Redis, and OpenSearch',
+    url: 'https://docs.oracle.com/en/solutions/modernize-app-dev-oci-postgresql-redis-opensearch/#GUID-DA0594DA-D549-481E-9CBD-46735766CA82', tags: ['oci-database-with-postgresql', 'oci-cache', 'oci-search-with-opensearch'],
+  },
+  {
+    id: 'demo-livelabs-iot-cache-postgresql', category: 'demo', type: 'LiveLabs workshop', title: 'Accelerating IoT with OCI Cache and PostgreSQL',
+    creator: 'Piotr Kurzynoga and Andriy Dorokhin',
+    url: 'https://livelabs.oracle.com/ords/r/dbpm/livelabs/run-workshop?p210_wid=4383', tags: ['oci-cache', 'oci-database-with-postgresql'], publishedAt: '2026-04-21',
+  },
+  {
+    id: 'demo-postgresql-full-stack-dr', category: 'demo', type: 'Oracle Learn tutorial', title: 'PostgreSQL Cold Disaster Recovery',
+    creator: 'Piotr Kurzynoga and Antoun Moubarak',
+    url: 'https://docs.oracle.com/en/learn/full-stack-dr-pgsql-cold-dr/', tags: ['oci-database-with-postgresql'], publishedAt: '2025-07-16',
+  },
+  {
+    id: 'demo-postgresql-rclone-migration', category: 'demo', type: 'Oracle Learn tutorial', title: 'Migrate PostgreSQL with Rclone',
+    creator: 'Sylwester Dec',
+    url: 'https://docs.oracle.com/en/learn/migrate-postgres-with-rclone/#introduction', tags: ['oci-database-with-postgresql'], publishedAt: '2025-06-25',
+  },
+  {
+    id: 'demo-postgresql-dbeaver', category: 'demo', type: 'Oracle Learn tutorial', title: 'Connect PostgreSQL with DBeaver',
+    creator: 'Jevon Rowan',
+    url: 'https://docs.oracle.com/en/learn/oci-postgres-dbeaver/#introduction', tags: ['oci-database-with-postgresql'], publishedAt: '2024-09-24',
+  },
+  {
+    id: 'demo-postgresql-oac', category: 'demo', type: 'Oracle Learn tutorial', title: 'Connect PostgreSQL to Oracle Analytics Cloud',
+    creator: 'Bob Peulen',
+    url: 'https://docs.oracle.com/en/learn/oci-postgres-oac/', tags: ['oci-database-with-postgresql'], publishedAt: '2024-09-24',
+  },
+  {
+    id: 'demo-cache-redis-insight', category: 'demo', type: 'Oracle Learn tutorial', title: 'Connect OCI Cache with Redis Insight',
+    creator: 'Ismael Hassane',
+    url: 'https://docs.oracle.com/en/learn/oci-cache-redis/#introduction', tags: ['oci-cache'], publishedAt: '2024-10-30',
+  },
+  {
+    id: 'article-magical-suitcase', category: 'article', type: 'Medium article', title: 'Revival of the Magical Suitcase',
+    creator: 'Piotr Kurzynoga',
+    url: 'https://medium.com/@devpiotrekk/revival-of-the-magical-suitcase-73093af23f29', tags: ['oci-streaming'], publishedAt: '2024-04-30',
+  },
 ].map((resource) => ({
   ...resource,
-  updatedAt: githubUpdatedAt[resource.id] ?? null,
+  updatedAt: resource.updatedAt ?? githubUpdatedAt[resource.id] ?? null,
 }));

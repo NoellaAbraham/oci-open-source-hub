@@ -13,7 +13,7 @@ export default function DemosResources() {
     ...session,
     category: 'demo',
     type: 'Developer coaching session',
-    description: `${session.speaker} · ${session.focus}`,
+    creator: session.speaker,
     url: `https://www.youtube.com/watch?v=${session.youtubeId}`,
     publishedAt: session.publishedAt,
   }));
@@ -73,16 +73,20 @@ export default function DemosResources() {
           </div>
           {visibleItems.length > 0 && <div className={styles.grid}>
             {visibleItems.map((item) => (
-              <a className={`${styles.card} ${item.category === 'demo' ? styles.videoCard : ''}`} key={item.id} href={item.url} target="_blank" rel="noopener noreferrer">
-                {item.category === 'demo' && <div className={styles.videoFrame}>
+              <a className={`${styles.card} ${item.youtubeId ? styles.videoCard : ''}`} key={item.id} href={item.url} title={item.title} target="_blank" rel="noopener noreferrer">
+                {item.youtubeId && <div className={styles.videoFrame}>
                   <img src={`https://i.ytimg.com/vi/${item.youtubeId}/maxresdefault.jpg`} alt="" /><span className={styles.playButton} aria-hidden="true" />
                 </div>}
                 <div className={styles.cardContent}>
                   <div className={styles.cardTopline}>
                     <span>{item.type}</span>
-                    <span className={styles.serviceTag}>{item.tags.map((tag) => resourceServiceTags[tag]).join(' · ')}</span>
                   </div>
-                  <h2>{item.title}</h2><p>{item.description}</p>
+                  <h2>{item.title}</h2>
+                  <div className={styles.cardDetails}>
+                    {item.description && <p>{item.description}</p>}
+                    {item.creator && <p className={styles.creator}>Created by: {item.creator}</p>}
+                  </div>
+                  <span className={styles.serviceTag} title={item.tags.map((tag) => resourceServiceTags[tag]).join(' · ')}>{item.tags.map((tag) => resourceServiceTags[tag]).join(' · ')}</span>
                   <span className={styles.srOnly}>Opens in a new tab</span>
                 </div>
               </a>

@@ -22,20 +22,21 @@ const focusAreas = [
 ];
 
 const team = [
-  {name: 'Bob Peuleun', role: 'Open Source Data Leader', email: 'bob.peulen@oracle.com', initials: 'bp'},
-  {name: 'Noella Abraham', role: 'Open Source Data Black Belt', email: 'noella.abraham@oracle.com', initials: 'na'},
-  {name: 'Irine Benoy', role: 'Open Source Data Black Belt', email: 'irine.benoy@oracle.com', initials: 'ib'},
-  {name: 'Olivier Dasini', role: 'Open Source Data Black Belt', email: 'olivier.dasini@oracle.com', initials: 'od'},
-  {name: 'Piotr Kurzynoga', role: 'Open Source Data Black Belt', email: 'piotr.kurzynoga@oracle.com', initials: 'pk'},
-  {name: 'Andriy Dorokhin', role: 'Open Source Data Black Belt', email: 'andriy.dorokhin@oracle.com', initials: 'ad'},
-  {name: 'Jevon Rowan', role: 'Open Source Data Black Belt', email: 'jevon.rowan@oracle.com', initials: 'jr'},
-  {name: 'Mohammed Bashir', role: 'Open Source Data Black Belt', email: 'mohammed.bashir@oracle.com', initials: 'mb'},
-  {name: 'Sylwester Dec', role: 'Open Source Data Black Belt', email: 'sylwester.dec@oracle.com', initials: 'sd'},
-  {name: 'Ivan Ma', role: 'Open Source Data Black Belt', email: 'ivan-cs.ma@oracle.com', initials: 'im'},
+  {name: 'Bob Peuleun', role: 'Open Source Data Leader', email: 'bob.peulen@oracle.com', initials: 'bp', image: 'bob.png'},
+  {name: 'Noella Abraham', role: 'Open Source Data Black Belt', email: 'noella.abraham@oracle.com', initials: 'na', image: 'noella.jpg'},
+  {name: 'Irine Benoy', role: 'Open Source Data Black Belt', email: 'irine.benoy@oracle.com', initials: 'ib', image: 'irine.png'},
+  {name: 'Olivier Dasini', role: 'Open Source Data Black Belt', email: 'olivier.dasini@oracle.com', initials: 'od', image: 'olivier.png'},
+  {name: 'Piotr Kurzynoga', role: 'Open Source Data Black Belt', email: 'piotr.kurzynoga@oracle.com', initials: 'pk', image: 'piotr.png'},
+  {name: 'Andriy Dorokhin', role: 'Open Source Data Black Belt', email: 'andriy.dorokhin@oracle.com', initials: 'ad', image: 'andriy.png'},
+  {name: 'Jevon Rowan', role: 'Open Source Data Black Belt', email: 'jevon.rowan@oracle.com', initials: 'jr', image: 'jevon.png'},
+  {name: 'Mohammed Bashir', role: 'Open Source Data Black Belt', email: 'mohammed.bashir@oracle.com', initials: 'mb', image: 'bashir.png'},
+  {name: 'Sylwester Dec', role: 'Open Source Data Black Belt', email: 'sylwester.dec@oracle.com', initials: 'sd', image: 'sylwester.png'},
+  {name: 'Ivan Ma', role: 'Open Source Data Black Belt', email: 'ivan-cs.ma@oracle.com', initials: 'im', image: 'ivan.png'},
 ];
 
 export default function AboutPage() {
   const zooImage = useBaseUrl('img/zoo.png');
+  const teamImageBase = useBaseUrl('img/team/');
   const carouselRef = useRef(null);
   const moveCarousel = (direction) => {
     const viewport = carouselRef.current;
@@ -100,8 +101,12 @@ export default function AboutPage() {
             <div className={styles.carousel} ref={carouselRef} aria-label="Team members">
               {team.map((member) => (
                 <article className={styles.member} key={member.initials}>
-                  <div className={styles.photoPlaceholder} aria-label={`${member.name} photo placeholder`} role="img">
-                    {member.image ? <img src={member.image} alt={`${member.name} placeholder`} /> : member.initials}
+                  <div className={styles.photoPlaceholder}>
+                    {member.image ? (
+                      <img src={`${teamImageBase}${member.image}`} alt={`${member.name} portrait`} />
+                    ) : (
+                      <span role="img" aria-label={`${member.name} photo placeholder`}>{member.initials}</span>
+                    )}
                   </div>
                   <h3>{member.name}</h3>
                   <p>{member.role}</p>
