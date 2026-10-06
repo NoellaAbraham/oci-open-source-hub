@@ -1,11 +1,12 @@
 .page { background: var(--oci-ink); color: var(--site-text); }
 .contentWidth { width: min(100%, 1320px); margin: 0 auto; }
-.introduction { padding: clamp(2.5rem, 5vw, 4rem) clamp(1.25rem, 4vw, 5rem) clamp(4rem, 7vw, 6rem); }
+.introduction { padding: var(--site-page-heading-top) clamp(1.25rem, 4vw, 5rem) clamp(4rem, 7vw, 6rem); }
 .introduction .contentWidth { width: min(100%, 1320px); margin-inline: auto; }
 .aboutHero { min-height: 190px; display: grid; grid-template-columns: minmax(0, 620px) minmax(220px, 440px); align-items: center; justify-content: space-between; gap: clamp(2rem, 7vw, 7rem); }
+.aboutHero > div { align-self: start; }
 .heroImage { width: min(100%, 440px); max-height: 185px; justify-self: end; object-fit: contain; }
 .label { margin: 0; color: var(--oci-terracotta); font-size: 0.78rem; font-weight: 700; letter-spacing: 0.13em; text-transform: uppercase; }
-.introduction h1 { margin: 0; color: var(--site-text); font-size: clamp(2.25rem, 3.5vw, 3.5rem); font-weight: 400; letter-spacing: -0.04em; line-height: 1; }
+.introduction h1 { margin: 0; color: var(--site-text); font-size: var(--site-page-title-size); font-weight: 400; letter-spacing: var(--site-page-title-tracking); line-height: 1; }
 .lead { max-width: 620px; margin: 1.25rem 0 0; color: var(--site-muted); font-size: clamp(1.05rem, 1.6vw, 1.25rem); line-height: 1.5; }
 .focusGrid { width: 100%; margin-top: clamp(3rem, 5vw, 4.5rem); display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); border-top: 1px solid var(--site-border); border-bottom: 1px solid var(--site-border); }
 .focus { min-width: 0; min-height: 230px; padding: clamp(1.6rem, 3vw, 2.25rem); display: grid; grid-template-rows: 3.25rem auto 1fr; align-content: start; text-align: left; transition: background-color 180ms ease, box-shadow 180ms ease; }
@@ -31,4 +32,4 @@
 .member p { margin: 0.4rem 0 0; color: var(--site-muted); font-size: 0.92rem; }
 .email { margin-top: 0.9rem; display: block; overflow-wrap: anywhere; color: var(--oci-terracotta); font-size: 0.82rem; }
 @media (max-width: 900px) { .aboutHero { grid-template-columns: minmax(0, 1fr) minmax(180px, 300px); gap: 2rem; } .heroImage { max-height: 170px; } .carousel { grid-auto-columns: calc((100% - 1.5rem) / 2); } }
-@media (max-width: 600px) { .introduction { padding-top: 3.25rem; } .aboutHero { min-height: 0; display: block; } .heroImage { display: none; } .focusGrid { margin-top: 3rem; grid-template-columns: 1fr; } .focus { min-height: 0; padding: 1.75rem 0; } .focus + .focus { border-top: 1px solid var(--site-border); border-left: 0; } .teamSection { padding-inline: 1.25rem; } .teamHeader { align-items: flex-start; flex-direction: column; } .carousel { grid-auto-columns: minmax(230px, 82%); } }
+@media (max-width: 600px) { .aboutHero { min-height: 0; display: block; } .heroImage { display: none; } .focusGrid { margin-top: 3rem; grid-template-columns: 1fr; } .focus { min-height: 0; padding: 1.75rem 0; } .focus + .focus { border-top: 1px solid var(--site-border); border-left: 0; } .teamSection { padding-inline: 1.25rem; } .teamHeader { align-items: flex-start; flex-direction: column; } .carousel { grid-auto-columns: minmax(230px, 82%); } }

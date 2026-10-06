@@ -1,6 +1,6 @@
 .page { min-height: calc(100vh - var(--ifm-navbar-height)); background: var(--oci-ink); color: var(--site-text); }
-.header { padding: clamp(2.5rem, 6vw, 5rem) max(clamp(1.25rem, 4vw, 5rem), calc((100vw - 1320px) / 2)) clamp(2rem, 4vw, 3.5rem); border-bottom: 1px solid var(--site-border); }
-.header h1 { margin: 0; color: var(--site-text); font-size: clamp(2.25rem, 3.5vw, 3.5rem); font-weight: 400; line-height: 1; }
+.header { padding: var(--site-page-heading-top) max(clamp(1.25rem, 4vw, 5rem), calc((100vw - 1320px) / 2)) clamp(2rem, 4vw, 3.5rem); border-bottom: 1px solid var(--site-border); }
+.header h1 { margin: 0; color: var(--site-text); font-size: var(--site-page-title-size); font-weight: 400; letter-spacing: var(--site-page-title-tracking); line-height: 1; }
 .header p { max-width: 620px; margin: 1.25rem 0 0; color: var(--site-muted); font-size: clamp(1.05rem, 1.6vw, 1.25rem); line-height: 1.5; }
 .catalog { padding: 2.5rem clamp(1.25rem, 4vw, 5rem) 5rem; }
 .catalogControls { margin-bottom: 2rem; display: flex; align-items: flex-start; gap: 1.25rem; border-bottom: 1px solid var(--site-border); }

@@ -1,6 +1,6 @@
-.page { min-height: calc(100vh - var(--ifm-navbar-height)); padding: clamp(2.5rem, 6vw, 5rem) clamp(1.25rem, 4vw, 5rem) 5rem; background: var(--oci-ink); color: var(--site-text); }
+.page { min-height: calc(100vh - var(--ifm-navbar-height)); padding: var(--site-page-heading-top) clamp(1.25rem, 4vw, 5rem) 5rem; background: var(--oci-ink); color: var(--site-text); }
 .header { width: min(100%, 1320px); margin: 0 auto; padding-bottom: clamp(2rem, 4vw, 3.5rem); border-bottom: 1px solid var(--site-border); }
-.header h1 { margin: 0; color: var(--site-text); font-size: clamp(2.25rem, 3.5vw, 3.5rem); font-weight: 400; line-height: 1; }
+.header h1 { margin: 0; color: var(--site-text); font-size: var(--site-page-title-size); font-weight: 400; letter-spacing: var(--site-page-title-tracking); line-height: 1; }
 .header p { max-width: 620px; margin: 1.25rem 0 0; color: var(--site-muted); font-size: clamp(1.05rem, 1.6vw, 1.25rem); line-height: 1.5; }
 .list { width: min(100%, 1320px); margin: 0 auto; }
 .report { padding: clamp(2rem, 4vw, 3rem) 0; display: grid; grid-template-columns: 220px minmax(0, 1fr) auto; align-items: center; gap: clamp(1.5rem, 4vw, 3.5rem); border-bottom: 1px solid var(--site-border); }
@@ -16,4 +16,4 @@
 .actions a { min-height: 2.5rem; padding: 0.55rem 0.8rem; display: inline-flex; align-items: center; justify-content: center; color: var(--site-text); border: 1px solid var(--site-border); font-size: 0.86rem; text-decoration: none; white-space: nowrap; }
 .actions a:hover { color: #ffffff; border-color: var(--oci-terracotta); background: var(--oci-terracotta); text-decoration: none; }
 @media (max-width: 900px) { .report { grid-template-columns: 180px minmax(0, 1fr); } .cover { width: 180px; } .actions { grid-column: 2; } }
-@media (max-width: 600px) { .page { padding-top: 2.5rem; } .report { grid-template-columns: 1fr; gap: 1.25rem; } .cover { width: min(100%, 300px); } .actions { grid-column: auto; flex-wrap: wrap; } }
+@media (max-width: 600px) { .report { grid-template-columns: 1fr; gap: 1.25rem; } .cover { width: min(100%, 300px); } .actions { grid-column: auto; flex-wrap: wrap; } }

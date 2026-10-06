@@ -18,6 +18,9 @@
   --site-muted: #625d58;
   --site-subtle: #817b75;
   --site-border: #dedbd7;
+  --site-page-heading-top: clamp(2.5rem, 5vw, 4rem);
+  --site-page-title-size: clamp(2.25rem, 3.5vw, 3.5rem);
+  --site-page-title-tracking: -0.04em;
   --site-nav-link: #625d58;
   --site-nav-hover: #211f1d;
   --oci-ink: var(--site-surface);
