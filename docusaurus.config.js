@@ -12,6 +12,11 @@ import {themes as prismThemes} from 'prism-react-renderer';
 const config = {
   title: 'Oracle Open Source Hub',
   tagline: 'Open source technologies on Oracle Cloud Infrastructure',
+  customFields: {
+    serviceApiUrl: process.env.SERVICE_API_URL || (process.env.NODE_ENV === 'production'
+      ? 'https://ot4nerzcs4bqcj2o6tpvqx3fsq.apigateway.eu-frankfurt-1.oci.customer-oci.com'
+      : 'http://localhost:3001'),
+  },
 
   // Future flags, see https://docusaurus.io/docs/api/docusaurus-config#future
   future: {

@@ -1,0 +1,11 @@
+[
+  {"name":"OCI Database with PostgreSQL","categories":["databases"],"description":"Managed PostgreSQL on OCI with built-in backups, security, and high availability.","url":"https://phantompete.github.io/OCIPostgreSQLShowcase/","image":"/img/services/postgresql.png"},
+  {"name":"MySQL HeatWave","categories":["databases"],"description":"Run MySQL transactions, analytics, and AI workloads in one managed service on OCI.","url":"https://freshdaz.github.io/MySQL_HeatWave_Showcase/#overview","image":"/img/services/mysql-heatwave.png"},
+  {"name":"OCI Cache","categories":["databases"],"description":"Redis-compatible caching for fast queries, sessions, and real-time application data.","url":"https://www.oracle.com/cloud/cache/","image":"/img/services/oci-cache.png"},
+  {"name":"OCI Search with OpenSearch","categories":["databases","search"],"description":"Index logs, search data, and monitor applications with managed OpenSearch clusters.","url":"https://www.oracle.com/cloud/search/","image":"/img/services/opensearch.png"},
+  {"name":"OCI NoSQL","categories":["databases"],"description":"Store flexible data and scale high-throughput applications with managed NoSQL.","url":"https://www.oracle.com/database/nosql/","image":"/img/services/NoSQL-Database.svg"},
+  {"name":"OCI Streaming","categories":["streaming"],"description":"Ingest high-volume event streams for logs, user activity, IoT, and real-time apps.","url":"https://www.oracle.com/cloud/streaming/","image":"/img/services/Streaming.svg"},
+  {"name":"OCI Streaming with Apache Kafka","categories":["streaming"],"description":"Build real-time data pipelines with fully managed Apache Kafka on OCI.","url":"https://www.oracle.com/cloud/apache-kafka/","image":"/img/services/apache-kafka.png"},
+  {"name":"OCI Data Flow","categories":["big-data"],"description":"Process large datasets and run ETL jobs with managed Apache Spark.","url":"https://docs.oracle.com/en-us/iaas/Content/data-flow/using/home.htm","image":"/img/services/DataFlow.svg"},
+  {"name":"OCI Big Data","categories":["big-data"],"description":"Run Hadoop and Spark clusters to prepare large datasets for analytics.","url":"https://www.oracle.com/big-data/big-data-service/","image":"/img/services/BigData.svg"}
+]

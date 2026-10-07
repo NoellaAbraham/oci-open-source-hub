@@ -1,12 +1,27 @@
 .page { min-height: calc(100vh - var(--ifm-navbar-height)); background: var(--oci-ink); color: var(--site-text); }
-.hero { max-width: 1480px; min-height: 220px; margin-inline: auto; padding: var(--site-page-heading-top) clamp(1.25rem, 4vw, 5rem) 2rem; display: grid; grid-template-columns: minmax(0, 620px) minmax(220px, 440px); align-items: center; justify-content: space-between; gap: clamp(2rem, 7vw, 7rem); border-bottom: 1px solid var(--site-border); }
-.heroCopy { min-width: 0; align-self: start; }
-.hero h1 { margin: 0; color: var(--site-text); font-size: var(--site-page-title-size); font-weight: 400; letter-spacing: var(--site-page-title-tracking); line-height: 1; }
+.hero { max-width: 1480px; min-height: 220px; margin-inline: auto; padding: clamp(2rem, 4vw, 3.5rem) clamp(1.25rem, 4vw, 5rem) 2rem; display: grid; grid-template-columns: minmax(0, 620px) minmax(220px, 440px); align-items: center; justify-content: space-between; gap: clamp(2rem, 7vw, 7rem); border-bottom: 1px solid var(--site-border); }
+.heroCopy { min-width: 0; }
+.hero h1 { margin: 0; color: var(--site-text); font-size: clamp(2.25rem, 3.5vw, 3.5rem); font-weight: 400; line-height: 1; }
 .hero p { max-width: 620px; margin: 1.25rem 0 0; color: var(--site-muted); font-size: clamp(1.05rem, 1.6vw, 1.25rem); line-height: 1.5; }
 .hero .collaboratorLink { display: inline-flex; align-items: center; margin-top: 1.25rem; padding: 0.75rem 1.1rem; color: #fff; background: var(--oci-terracotta); font-weight: 700; text-decoration: none; }
+.collaboratorLink { border: 0; font: inherit; cursor: pointer; }
 .hero .collaboratorLink:hover, .hero .collaboratorLink:focus-visible { color: #fff; background: #a93425; text-decoration: none; }
 .heroImage { width: min(100%, 440px); max-height: 185px; justify-self: end; object-fit: contain; }
 .catalog { padding: 2.5rem clamp(1.25rem, 4vw, 5rem) 5rem; }
+.notice { max-width: 1320px; margin: 0 auto 1.5rem; color: #f5b99d; }
+.editorBackdrop { position: fixed; inset: 0; z-index: 100; overflow-y: auto; padding: 2rem 1rem; background: #000b; }
+.editorPanel { position: relative; width: min(100%, 560px); margin: auto; padding: 2rem; color: var(--site-text); background: #211d1b; border: 1px solid var(--site-border); box-shadow: 0 20px 60px #0009; }
+.editorPanel h2 { margin: 0 2rem 1.5rem 0; }
+.editorPanel form { display: grid; gap: .7rem; }
+.editorPanel label, .editorPanel legend { font-weight: 600; }
+.editorPanel input:not([type='checkbox']), .editorPanel textarea { width: 100%; padding: .65rem; color: var(--site-text); background: #161513; border: 1px solid #716962; border-radius: 0; font: inherit; }
+.editorPanel textarea { min-height: 7rem; resize: vertical; }
+.editorPanel fieldset { margin: .5rem 0; padding: .8rem; border: 1px solid #716962; }
+.editorPanel .categoryChoice { display: block; margin: .4rem 0; font-weight: 400; }
+.editorPanel button[type='submit'] { justify-self: start; margin-top: .7rem; padding: .7rem 1rem; color: #fff; background: var(--oci-terracotta); border: 0; font: inherit; font-weight: 700; cursor: pointer; }
+.editorPanel button:disabled { opacity: .55; cursor: not-allowed; }
+.closeEditor { position: absolute; top: 1rem; right: 1rem; color: var(--site-text); background: transparent; border: 0; font-size: 1.75rem; cursor: pointer; }
+.editorError { color: #ffad9c; }
 .catalogControls { max-width: 1320px; margin: 0 auto 2.75rem; display: flex; align-items: baseline; gap: 1rem; border-bottom: 1px solid var(--site-border); }
 .tabs { min-width: 0; flex: 1; display: flex; align-items: baseline; flex-wrap: wrap; gap: 0.5rem 1.8rem; }
 .tabs button { padding: 0 0 0.95rem; color: var(--site-muted); border: 0; border-bottom: 2px solid transparent; background: transparent; cursor: pointer; font: inherit; font-size: 0.95rem; }

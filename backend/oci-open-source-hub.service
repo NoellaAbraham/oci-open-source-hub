@@ -1,0 +1,21 @@
+[Unit]
+Description=OCI Open Source Hub service API
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=simple
+User=ubuntu
+Group=ubuntu
+WorkingDirectory=/home/ubuntu/oci-open-source-hub
+EnvironmentFile=/etc/oci-open-source-hub.env
+ExecStart=/usr/bin/node /home/ubuntu/oci-open-source-hub/backend/server.mjs
+Restart=on-failure
+RestartSec=3
+NoNewPrivileges=true
+ProtectSystem=strict
+ProtectHome=read-only
+ReadWritePaths=/home/ubuntu/oci-open-source-hub-data
+
+[Install]
+WantedBy=multi-user.target
