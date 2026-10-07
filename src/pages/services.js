@@ -30,12 +30,15 @@ const logoAccents = {
 };
 
 function ServiceCard({service, baseUrl}) {
+  const [imageFailed, setImageFailed] = useState(false);
   const Card = service.url ? 'a' : 'article';
   const linkProps = service.url ? {href: service.url, target: '_blank', rel: 'noopener noreferrer'} : {};
+  const imagePath = service.image || serviceIcons[service.name];
 
   return <Card className={styles.card} {...linkProps}>
     <span className={styles.logoBlock} style={{'--logo-accent': logoAccents[service.name]}} aria-hidden="true">
-      <span className={`${styles.marker} ${service.name === 'OCI Streaming with Apache Kafka' ? styles.lightLogo : ''} ${service.name === 'OCI Search with OpenSearch' ? styles.brightLogo : ''}`} style={{backgroundImage: `url(${baseUrl}${(service.image || serviceIcons[service.name] || '').replace(/^\//, '')})`}} />
+      {imagePath && !imageFailed ? <img className={`${styles.marker} ${service.name === 'OCI Streaming with Apache Kafka' ? styles.lightLogo : ''} ${service.name === 'OCI Search with OpenSearch' ? styles.brightLogo : ''}`} src={`${baseUrl}${imagePath.replace(/^\//, '')}`} alt="" onError={() => setImageFailed(true)} />
+        : <span className={styles.markerFallback}>{service.name.charAt(0).toUpperCase()}</span>}
       <span className={styles.logoAccent} />
     </span>
     <h2>{service.name}{service.url && <span className={styles.srOnly}> (opens in a new tab)</span>}</h2>
@@ -53,6 +56,7 @@ export default function Services() {
   const [password, setPassword] = useState('');
   const [editorError, setEditorError] = useState('');
   const [saving, setSaving] = useState(false);
+  const [selectedServiceId, setSelectedServiceId] = useState('');
   const [draft, setDraft] = useState({name: '', categories: [], description: '', url: '', image: ''});
   const [activeCategory, setActiveCategory] = useState('all');
   const [showBackToTop, setShowBackToTop] = useState(false);
@@ -108,6 +112,12 @@ export default function Services() {
     setEditorError('');
     setSaving(true);
     try {
+      if (draft.image) {
+        const logo = await fetch(`${baseUrl}${draft.image.replace(/^\//, '')}`, {method: 'HEAD'});
+        if (!logo.ok || !String(logo.headers.get('content-type') || '').startsWith('image/')) {
+          throw new Error('Logo file is missing from the published website. Upload it first or leave the logo path empty.');
+        }
+      }
       const response = await fetch(`${apiUrl}/api/services`, {
         method: 'POST',
         headers: {'Content-Type': 'application/json', Authorization: `Bearer ${editorToken}`},
@@ -117,6 +127,28 @@ export default function Services() {
       if (!response.ok) throw new Error(data.error || 'Could not add the service.');
       await loadServices();
       setDraft({name: '', categories: [], description: '', url: '', image: ''});
+      setEditorOpen(false);
+      setActiveCategory('all');
+    } catch (error) { setEditorError(error.message); }
+    finally { setSaving(false); }
+  }
+
+  async function deleteService(event) {
+    event.preventDefault();
+    const service = services.find((item) => item.id === selectedServiceId);
+    if (!service || !window.confirm(`Delete ${service.name}? This removes it from the public Services page.`)) return;
+    setEditorError('');
+    setSaving(true);
+    try {
+      const response = await fetch(`${apiUrl}/api/services`, {
+        method: 'DELETE',
+        headers: {'Content-Type': 'application/json', Authorization: `Bearer ${editorToken}`},
+        body: JSON.stringify({id: selectedServiceId}),
+      });
+      const data = await response.json();
+      if (!response.ok) throw new Error(data.error || 'Could not delete the service.');
+      await loadServices();
+      setSelectedServiceId('');
       setEditorOpen(false);
       setActiveCategory('all');
     } catch (error) { setEditorError(error.message); }
@@ -147,13 +179,13 @@ export default function Services() {
       {editorOpen && <div className={styles.editorBackdrop}>
         <section className={styles.editorPanel} aria-label="Service editor">
           <button className={styles.closeEditor} type="button" onClick={() => setEditorOpen(false)} aria-label="Close editor">×</button>
-          <h2>{editorToken ? 'Add a service' : 'Unlock service editor'}</h2>
+          <h2>{editorToken ? 'Manage services' : 'Unlock service editor'}</h2>
           {editorError && <p className={styles.editorError} role="alert">{editorError}</p>}
           {!editorToken ? <form onSubmit={unlockEditor}>
             <label htmlFor="editor-password">Editor password</label>
             <input id="editor-password" type="password" value={password} onChange={(event) => setPassword(event.target.value)} required />
             <button type="submit">Unlock editor</button>
-          </form> : <form onSubmit={addService}>
+          </form> : <><h3>Add a service</h3><form onSubmit={addService}>
             <label htmlFor="service-name">Service name</label>
             <input id="service-name" value={draft.name} maxLength={100} onChange={(event) => setDraft({...draft, name: event.target.value})} required />
             <fieldset><legend>Categories</legend>{serviceCategories.filter((item) => item.id !== 'all').map((item) =>
@@ -164,8 +196,17 @@ export default function Services() {
             <input id="service-url" type="url" value={draft.url} onChange={(event) => setDraft({...draft, url: event.target.value})} placeholder="https://" />
             <label htmlFor="service-image">Existing logo path (optional)</label>
             <input id="service-image" value={draft.image} onChange={(event) => setDraft({...draft, image: event.target.value})} placeholder="/img/services/example.svg" />
+            <p className={styles.fieldHint}>The logo file must already exist on the published website. Leave this empty to show a letter icon.</p>
             <button type="submit" disabled={saving || !draft.categories.length}>{saving ? 'Saving…' : 'Add service'}</button>
-          </form>}
+          </form><div className={styles.editorDivider} /><h3>Delete a service</h3>
+            <form onSubmit={deleteService}>
+              <label htmlFor="service-to-delete">Service</label>
+              <select id="service-to-delete" value={selectedServiceId} onChange={(event) => setSelectedServiceId(event.target.value)} required>
+                <option value="">Choose a service</option>
+                {services.filter((service) => service.id).map((service) => <option key={service.id} value={service.id}>{service.name}</option>)}
+              </select>
+              <button type="submit" disabled={saving || !selectedServiceId}>Delete service</button>
+            </form></>}
         </section>
       </div>}
     </main>

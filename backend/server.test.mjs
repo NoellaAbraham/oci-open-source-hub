@@ -35,7 +35,7 @@ async function stop(child) {
   await new Promise((resolve) => child.once('exit', resolve));
 }
 
-test('editor authorization, service creation, duplicate rejection, and persistence', async () => {
+test('editor authorization, service creation, deletion, and persistence', async () => {
   const dir = await mkdtemp(join(tmpdir(), 'hub-services-'));
   const port = await freePort();
   let server;
@@ -54,11 +54,14 @@ test('editor authorization, service creation, duplicate rejection, and persisten
     const {token} = await unlock.json();
     const item = {name: 'Example Service', categories: ['search'], description: 'A useful example search service.', url: 'https://example.com'};
     assert.equal((await request('/api/services', 'POST', item)).status, 401);
+    assert.equal((await request('/api/services', 'DELETE', {id: 'oci-cache'})).status, 401);
     const created = await request('/api/services', 'POST', item, token);
     assert.equal(created.status, 201);
     assert.equal((await created.json()).service.id, 'example-service');
     assert.equal((await request('/api/services', 'POST', item, token)).status, 409);
     assert.equal((await request('/api/services', 'POST', {...item, categories: ['invalid']}, token)).status, 400);
+    assert.equal((await request('/api/services', 'DELETE', {id: '../seed-services'}, token)).status, 400);
+    assert.equal((await request('/api/services', 'DELETE', {id: 'missing'}, token)).status, 404);
     assert.equal((await fetch(`${server.base}/api/services`, {headers: {Origin: 'https://wrong.example'}})).status, 403);
     assert.equal((await readdir(dir)).filter((name) => name.endsWith('.json')).length, 10);
     assert.equal(JSON.parse(await readFile(join(dir, 'example-service.json'), 'utf8')).name, item.name);
@@ -67,6 +70,15 @@ test('editor authorization, service creation, duplicate rejection, and persisten
     const reloaded = await (await fetch(`${server.base}/api/services`)).json();
     assert.equal(reloaded.services.length, 10);
     assert.ok(reloaded.services.some((service) => service.name === item.name));
+    const secondUnlock = await request('/api/editor/verify', 'POST', {password: 'test-password'});
+    const secondToken = (await secondUnlock.json()).token;
+    for (const service of reloaded.services) {
+      assert.equal((await request('/api/services', 'DELETE', {id: service.id}, secondToken)).status, 200);
+    }
+    assert.equal((await (await fetch(`${server.base}/api/services`)).json()).services.length, 0);
+    await stop(server.child);
+    server = await start(port, dir);
+    assert.equal((await (await fetch(`${server.base}/api/services`)).json()).services.length, 0);
   } finally {
     if (server && server.child.exitCode === null) await stop(server.child);
     await rm(dir, {recursive: true, force: true});

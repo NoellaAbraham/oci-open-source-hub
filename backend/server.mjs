@@ -1,6 +1,6 @@
 import {createServer} from 'node:http';
 import {randomBytes, timingSafeEqual} from 'node:crypto';
-import {mkdir, readFile, readdir, rename, writeFile} from 'node:fs/promises';
+import {mkdir, readFile, readdir, rename, unlink, writeFile} from 'node:fs/promises';
 import {dirname, join, resolve} from 'node:path';
 import {homedir} from 'node:os';
 import {fileURLToPath} from 'node:url';
@@ -52,8 +52,13 @@ function validateService(value) {
 
 async function seedData() {
   await mkdir(dataDir, {recursive: true});
-  const files = (await readdir(dataDir)).filter((name) => name.endsWith('.json'));
-  if (files.length) return;
+  const entries = await readdir(dataDir);
+  if (entries.includes('.initialized')) return;
+  const files = entries.filter((name) => name.endsWith('.json'));
+  if (files.length) {
+    await writeFile(join(dataDir, '.initialized'), '', {flag: 'wx'});
+    return;
+  }
   let seed;
   try { seed = JSON.parse(await readFile(legacyFile, 'utf8')); }
   catch (error) {
@@ -71,6 +76,7 @@ async function seedData() {
     used.add(id);
     await writeFile(join(dataDir, `${id}.json`), `${JSON.stringify(service, null, 2)}\n`, {flag: 'wx'});
   }
+  await writeFile(join(dataDir, '.initialized'), '', {flag: 'wx'});
 }
 
 function initialize() {
@@ -102,7 +108,7 @@ function headers(request) {
   const origin = request.headers.origin;
   return origin === siteOrigin ? {
     'Access-Control-Allow-Origin': origin,
-    'Access-Control-Allow-Methods': 'GET, POST, OPTIONS',
+    'Access-Control-Allow-Methods': 'GET, POST, DELETE, OPTIONS',
     'Access-Control-Allow-Headers': 'Content-Type, Authorization',
     Vary: 'Origin',
   } : {Vary: 'Origin'};
@@ -137,6 +143,18 @@ async function addService(value) {
   return {status: 201, service: {id, ...service}};
 }
 
+async function deleteService(value) {
+  const id = value?.id;
+  if (typeof id !== 'string' || !/^[a-z0-9][a-z0-9-]*$/.test(id)) throw new Error('Choose a valid service.');
+  await initialize();
+  try { await unlink(join(dataDir, `${id}.json`)); }
+  catch (error) {
+    if (error.code === 'ENOENT') return {status: 404, error: 'Service not found. Reload the catalog.'};
+    throw error;
+  }
+  return {status: 200, id};
+}
+
 async function handler(request, response) {
   const path = new URL(request.url || '/', 'http://localhost').pathname;
   if (request.method === 'GET' && path === '/health') return send(request, response, 200, {status: 'ok'});
@@ -168,6 +186,13 @@ async function handler(request, response) {
     const result = await (writes = writes.catch(() => {}).then(() => addService(value)));
     if (result.error) return send(request, response, result.status, {error: result.error});
     return send(request, response, 201, {service: result.service});
+  }
+  if (request.method === 'DELETE' && path === '/api/services') {
+    if (!authorized(request)) return send(request, response, 401, {error: 'Unlock the editor first.'});
+    const value = await readJson(request);
+    const result = await (writes = writes.catch(() => {}).then(() => deleteService(value)));
+    if (result.error) return send(request, response, result.status, {error: result.error});
+    return send(request, response, 200, {deleted: result.id});
   }
   return send(request, response, 404, {error: 'Not found.'});
 }

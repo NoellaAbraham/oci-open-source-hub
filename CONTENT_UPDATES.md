@@ -7,6 +7,7 @@ Only repository collaborators can make these changes. Put new source material in
 1. On the Services page, choose **Edit services** and enter the editor password.
 2. Enter the service name, at least one category, a short description, and optional URL or existing logo path.
 3. Choose **Add service**. The API saves a new JSON file and the service appears after the catalog refreshes. A site rebuild is not required.
+4. To remove a service, reopen **Edit services**, unlock it, choose the service under **Delete a service**, and confirm. Deletion takes effect on refresh.
 
 The editor API and persistent data directory must be deployed separately from GitHub Pages. See `backend/README.md`.
 
@@ -19,7 +20,7 @@ The editor API and persistent data directory must be deployed separately from Gi
 
 ## Add a service logo
 
-Upload the logo to `static/img/services/` and deploy the website first. Then use its `/img/services/<filename>` path in the service editor.
+Upload the logo to `static/img/services/` and deploy the website first. Then use its `/img/services/<filename>` path in the service editor. The editor checks that the file is available before saving. Leave the path empty to show a letter icon.
 
 ## Add a demo or resource
 
