@@ -1,7 +1,7 @@
 import {useEffect, useState} from 'react';
 import styles from './VmCatalogEditor.module.css';
 
-const uploadLimits = {video: 10_000_000, html: 2_000_000, image: 2_000_000};
+const uploadLimits = {video: 10_000_000, html: 10_000_000, image: 2_000_000};
 
 function emptyDraft(kind) {
   return kind === 'resources'
@@ -152,7 +152,7 @@ export default function VmCatalogEditor({kind, apiUrl, items, onSaved, onClose, 
             {input('summary', 'Summary', {multiline: true, required: true})}
             {input('coverImage', 'Cover image URL (optional)')}
             {fileInput('coverImage', 'Or upload a cover image', '.png,.jpg,.jpeg,.webp')}
-            {fileInput('htmlFile', 'Upload HTML report (up to 2 MB)', '.html')}
+            {fileInput('htmlFile', 'Upload HTML report (up to 10 MB)', '.html')}
             {input('readOnlinePath', 'Existing read-online page URL (optional)')}
             {input('pdfUrl', 'PDF URL (optional)')}
             {input('slidesUrl', 'Slide deck URL (optional)')}

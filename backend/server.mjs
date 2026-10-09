@@ -23,7 +23,7 @@ const categories = new Set(['databases', 'streaming', 'big-data', 'search']);
 const resourceCategories = new Set(['demo', 'github', 'article', 'diagram']);
 const mediaTypes = {
   video: {extensions: ['mp4', 'webm'], mime: ['video/mp4', 'video/webm'], limit: 10_000_000},
-  html: {extensions: ['html'], mime: ['text/html'], limit: 2_000_000},
+  html: {extensions: ['html'], mime: ['text/html'], limit: 10_000_000},
   image: {extensions: ['png', 'jpg', 'jpeg', 'webp'], mime: ['image/png', 'image/jpeg', 'image/webp'], limit: 2_000_000},
 };
 let writes = Promise.resolve();

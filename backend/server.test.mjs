@@ -104,7 +104,7 @@ test('resource and report editing, upload, and persistence', async () => {
     assert.equal(updated.status, 200);
     assert.equal((await updated.json()).resource.title, 'Updated Demo');
     assert.equal((await json('/api/resources', 'DELETE', {id: 'new-demo'})).status, 200);
-    const html = '<!doctype html><title>Test report</title><h1>Test report</h1>';
+    const html = '<!doctype html><title>Test report</title><h1>Test report</h1>' + ' '.repeat(5_500_000);
     assert.equal((await fetch(`${base}/api/media?kind=html&name=report.html`, {method: 'POST', headers: {'Content-Type': 'text/html'}, body: html})).status, 401);
     const upload = await fetch(`${base}/api/media?kind=html&name=report.html`, {method: 'POST', headers: {'Content-Type': 'text/html', Authorization: `Bearer ${token}`}, body: html});
     assert.equal(upload.status, 201);
