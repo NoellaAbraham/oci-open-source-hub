@@ -1,54 +1,45 @@
-# Service API
+# VM content API
 
-This is a small Node HTTP service following the OCI Healthcheck editor pattern: the public list is read from JSON files and an editor can add a new JSON file through the API. The Docusaurus site stays on GitHub Pages.
+The Docusaurus site stays on GitHub Pages. The OCI VM stores live services, demos/resources, reports, and uploaded files. The website reads those catalogs through the existing OCI API Gateway. Editors use the same password as the original service editor; every editor dialog has a close **×** button.
 
-## Run locally
+The VM must be running for live edits and uploads. If it is offline, the pages show their built-in catalogs.
 
-Set `EDITOR_PASSWORD`, then run `node backend/server.mjs` from the repository root. The API listens on port 3001 by default. Start Docusaurus separately on port 3000.
+## Storage
 
-The default data directory is `backend/data/services` and is seeded with the nine current services on first run. In production, set `SERVICE_DATA_DIR` to a persistent directory outside the Git checkout. Back it up separately.
+Set `EDITOR_PASSWORD` in `/etc/oci-open-source-hub.env`. The existing `SERVICE_DATA_DIR` remains unchanged. The new directories default to siblings of it: `resources`, `reports`, and `media`. You can override them with `RESOURCE_DATA_DIR`, `REPORT_DATA_DIR`, and `MEDIA_DATA_DIR`. Keep all directories under `/home/ubuntu/oci-open-source-hub-data` so the included systemd unit can write them.
 
-On first run with an empty data directory, the API imports the former `~/.local/share/oci-open-source-hub/services.json` catalog if it exists. Otherwise it uses `seed-services.json`. Set `LEGACY_SERVICE_FILE` if the former file is elsewhere. Keep a backup of the former file during migration.
+Each collection seeds once from `backend/seed-services.json`, `backend/seed-resources.json`, or `backend/seed-reports.json` if its directory is empty. An `.initialized` marker prevents a deliberately emptied catalog from being reseeded on restart. Back up the entire persistent data directory, including `media/`, separately from the Git checkout.
 
-## Routes
+## API routes
 
-- `GET /health` returns API status.
-- `GET /api/services` returns `{services}` for all visitors.
-- `POST /api/editor/verify` accepts `{password}` and returns a short lived editor token.
-- `POST /api/services` accepts a service with `Authorization: Bearer <token>`. A new `<id>.json` file is created; duplicate names return 409.
-- `DELETE /api/services` accepts `{id}` with the editor token and removes that service's JSON file.
+| Route | Methods | Purpose |
+| --- | --- | --- |
+| `/health` | GET | API status |
+| `/api/editor/verify` | POST, OPTIONS | Password to short-lived editor token |
+| `/api/services` | GET, POST, DELETE, OPTIONS | Existing service catalog |
+| `/api/resources` | GET, POST, PUT, DELETE, OPTIONS | Demo and resource catalog |
+| `/api/reports` | GET, POST, PUT, DELETE, OPTIONS | Report catalog |
+| `/api/media` | GET, POST, OPTIONS | Public uploaded files and authenticated uploads |
 
-Set `SITE_ORIGIN` to the exact website origin for browser requests. The site builds with `SERVICE_API_URL`; its production default is the existing OCI gateway. Configure the gateway routes for `/health` (GET), `/api/editor/verify` (POST, OPTIONS), and `/api/services` (GET, POST, DELETE, OPTIONS) to point to this service.
+For the four new routes, configure the OCI API Gateway with HTTP back ends pointing to the VM's private IP on port 3000 at the same path. Preserve query strings for `/api/media`. Continue forwarding the existing routes. Set `SITE_ORIGIN=https://noellaabraham.github.io` in the VM environment. The Docusaurus build uses `SERVICE_API_URL`; its production default is the current gateway URL.
 
-## Existing OCI VM deployment
+Videos accept MP4 or WebM up to 10 MB; HTML reports and cover images accept up to 2 MB. The [OCI API Gateway request body limit is 20 MB](https://docs.oracle.com/en-us/iaas/Content/APIGateway/Reference/apigatewaylimits.htm), so link larger videos from a video host. Uploaded HTML should be self-contained or use absolute URLs for its assets. Uploaded files are publicly readable through `/api/media`.
 
-The included systemd unit assumes the repository is at `/home/ubuntu/oci-open-source-hub`, Node is at `/usr/bin/node`, and the persistent data directory is `/home/ubuntu/oci-open-source-hub-data/services`. Adjust it if the VM differs. Put `EDITOR_PASSWORD`, `SITE_ORIGIN=https://noellaabraham.github.io`, `PORT=3000`, and `SERVICE_DATA_DIR` in `/etc/oci-open-source-hub.env`; keep that file readable only by root. The existing password can be reused by setting it as `EDITOR_PASSWORD` on the VM. Create the data directory owned by `ubuntu` before starting the unit. The gateway should forward the three routes above to the VM's private IP on port 3000. Allow that port from the gateway subnet to the VM, while keeping it closed to the public internet.
+## Deploy updated VM code
 
-After starting the unit, check `systemctl status oci-open-source-hub`, `curl http://127.0.0.1:3000/health`, and `curl http://127.0.0.1:3000/api/services` on the VM. Then check the public gateway URLs. Deploy the rebuilt Docusaurus site to GitHub Pages last.
-
-From an updated checkout on the VM, the setup commands are:
+From an updated checkout on the VM:
 
 ```sh
-sudo mkdir -p /home/ubuntu/oci-open-source-hub-data/services
+sudo mkdir -p /home/ubuntu/oci-open-source-hub-data/{services,resources,reports,media}
 sudo chown -R ubuntu:ubuntu /home/ubuntu/oci-open-source-hub-data
 sudoedit /etc/oci-open-source-hub.env
 sudo chmod 600 /etc/oci-open-source-hub.env
 sudo cp backend/oci-open-source-hub.service /etc/systemd/system/oci-open-source-hub.service
 sudo systemctl daemon-reload
-sudo systemctl enable --now oci-open-source-hub
 sudo systemctl restart oci-open-source-hub
 curl -i http://127.0.0.1:3000/health
-curl -i http://127.0.0.1:3000/api/services
+curl -i http://127.0.0.1:3000/api/resources
+curl -i http://127.0.0.1:3000/api/reports
 ```
 
-In the OCI gateway deployment, use these methods and HTTP targets:
-
-| Route | Methods | Target |
-| --- | --- | --- |
-| `/health` | GET | `http://10.10.220.80:3000/health` |
-| `/api/editor/verify` | POST, OPTIONS | `http://10.10.220.80:3000/api/editor/verify` |
-| `/api/services` | GET, POST, DELETE, OPTIONS | `http://10.10.220.80:3000/api/services` |
-
-Remove the former `/api/auth` route when the new routes work. If the public `/health` request times out while the VM's local request succeeds, check the gateway's public subnet route, TCP 443 ingress, and gateway to VM TCP 3000 access before publishing the website.
-
-The old GitHub Actions proposal workflow is retired. Adding a service through this editor updates the API catalog immediately; it does not create a pull request or change `src/data/services.js`.
+After the gateway routes respond, deploy the rebuilt Docusaurus site to GitHub Pages. Test a temporary entry from each editor, then delete it. Content changes on the VM appear after the catalog refreshes; they do not require a site rebuild and do not create GitHub commits.

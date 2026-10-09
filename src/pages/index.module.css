@@ -233,6 +233,7 @@
 }
 
 .videoFrame img { width: 100%; height: 100%; object-fit: cover; }
+.videoFrame video { width: 100%; height: 100%; object-fit: cover; }
 
 .playButton {
   position: absolute;

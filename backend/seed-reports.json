@@ -1,0 +1,33 @@
+[
+  {
+    "id": "mysql-heatwave-core-capabilities",
+    "title": "MySQL HeatWave Core Capabilities",
+    "period": "September 2026",
+    "summary": "Five core capabilities for transactional MySQL workloads: automated indexing, high availability, read scaling, enterprise security, and fast DB System cloning.",
+    "coverImage": "/reports/mysql-heatwave-core-capabilities/diagram-01.png",
+    "readOnlinePath": "/reports/mysql-heatwave-core-capabilities",
+    "slidesUrl": "https://speakerdeck.com/freshdaz/mysql-heatwave-on-oci-five-capabilities-for-transactional-workloads",
+    "pdfUrl": "https://speakerdeck.com/freshdaz/mysql-heatwave-on-oci-five-capabilities-for-transactional-workloads-45d1a5d4-8ad5-4c0a-be67-d04e8b6b26e5",
+    "tags": [
+      "mysql-heatwave"
+    ],
+    "publishedAt": "2026-09-01",
+    "order": 0
+  },
+  {
+    "id": "mysql-heatwave-june-2026",
+    "title": "MySQL & MySQL HeatWave Report - June 2026",
+    "description": "A quarterly update on key features, innovations and announcements across Oracle Cloud open source services.",
+    "coverImage": "https://files.speakerdeck.com/presentations/b315340a27fd47c4b64d2c44191df646/slide_0.jpg",
+    "readOnlinePath": "/reports/mysql-heatwave-june-2026",
+    "slidesUrl": "https://speakerdeck.com/freshdaz/mysql-and-mysql-heatwave-report-june-2026",
+    "pdfUrl": "/reports/mysql-heatwave-report-june-2026.pdf",
+    "tags": [
+      "mysql-heatwave"
+    ],
+    "period": "June 2026",
+    "summary": "Key MySQL 9.7 LTS and MySQL HeatWave 9.7 features, including reliability, security, observability, and GenAI capabilities.",
+    "publishedAt": "2026-06-01",
+    "order": 1
+  }
+]

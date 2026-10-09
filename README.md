@@ -1,6 +1,6 @@
 # OCI Open Source Hub
 
-This website is the Oracle Cloud open source hub. To update reports, services, and demos through GitHub, follow `CONTENT_UPDATES.md`.
+This website is the Oracle Cloud open source hub. Editors can update services, demos, resources, and reports through the VM-backed forms on each page. See `CONTENT_UPDATES.md` for the editor workflow and `backend/README.md` for VM deployment.
 
 ## Installation
 

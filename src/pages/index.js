@@ -1,19 +1,35 @@
+import {useEffect, useState} from 'react';
 import Link from '@docusaurus/Link';
 import useBaseUrl from '@docusaurus/useBaseUrl';
+import useDocusaurusContext from '@docusaurus/useDocusaurusContext';
 import Layout from '@theme/Layout';
-import {coachingSessions} from '@site/src/data/coachingSessions';
+import {coachingSessions as builtInSessions} from '@site/src/data/coachingSessions';
 import {openSourceHighlights} from '@site/src/data/openSourceHighlights';
-import {reports} from '@site/src/data/reports';
+import {reports as builtInReports} from '@site/src/data/reports';
 import styles from './index.module.css';
 
 export default function Home() {
+  const {siteConfig} = useDocusaurusContext();
+  const apiUrl = String(siteConfig.customFields.serviceApiUrl).replace(/\/$/, '');
+  const baseUrl = useBaseUrl('/');
+  const [reports, setReports] = useState(builtInReports);
+  const [coachingSessions, setCoachingSessions] = useState(builtInSessions);
   const latestReport = reports[0];
-  const reportPdfUrl = useBaseUrl(latestReport.pdfUrl);
-  const reportReadOnlineUrl = useBaseUrl(latestReport.readOnlinePath);
-  const reportCoverUrl = useBaseUrl(latestReport.coverImage);
+  const siteHref = (path) => path && (path.startsWith('/api/media?') ? `${apiUrl}${path}`
+    : /^https?:\/\//.test(path) ? path : `${baseUrl}${path.replace(/^\//, '')}`);
+  const reportPdfUrl = siteHref(latestReport?.pdfUrl);
+  const reportReadOnlineUrl = siteHref(latestReport?.htmlFile || latestReport?.readOnlinePath);
+  const reportCoverUrl = siteHref(latestReport?.coverImage);
   const featuredSessions = coachingSessions.slice(0, 4);
   const hasMoreSessions = coachingSessions.length > 4;
   const featuredHighlights = openSourceHighlights.slice(0, 3);
+
+  useEffect(() => {
+    fetch(`${apiUrl}/api/reports`).then((response) => response.ok ? response.json() : null)
+      .then((data) => { if (Array.isArray(data?.reports)) setReports(data.reports); }).catch(() => {});
+    fetch(`${apiUrl}/api/resources`).then((response) => response.ok ? response.json() : null)
+      .then((data) => { if (Array.isArray(data?.resources)) setCoachingSessions(data.resources.filter((item) => item.type === 'Developer coaching session').map((item) => ({...item, speaker: item.creator, focus: item.description}))); }).catch(() => {});
+  }, [apiUrl]);
 
   return (
     <Layout
@@ -65,18 +81,17 @@ export default function Home() {
           </div>
           <div className={styles.sessionsGrid}>
             {featuredSessions.map((session) => {
-              const thumbnail = session.youtubeId
-                ? `https://i.ytimg.com/vi/${session.youtubeId}/maxresdefault.jpg`
+              const videoId = !session.videoFile && (session.videoUrl || session.url || '').match(/(?:youtube\.com\/watch\?v=|youtu\.be\/)([\w-]+)/)?.[1];
+              const thumbnail = videoId
+                ? `https://i.ytimg.com/vi/${videoId}/maxresdefault.jpg`
                 : null;
-              const videoUrl = session.youtubeId
-                ? `https://www.youtube.com/watch?v=${session.youtubeId}`
-                : null;
+              const videoUrl = siteHref(session.videoFile || session.videoUrl || session.url);
 
               return (
                 <article className={styles.sessionCard} data-tags={session.tags.join(' ')} key={session.id}>
                   {videoUrl ? (
                     <a className={styles.videoFrame} href={videoUrl} target="_blank" rel="noreferrer" aria-label={`Play ${session.title} on YouTube`}>
-                      <img src={thumbnail} alt="" />
+                      {thumbnail ? <img src={thumbnail} alt="" /> : session.videoFile ? <video src={videoUrl} muted playsInline preload="metadata" /> : null}
                       <span className={styles.playButton} aria-hidden="true" />
                     </a>
                   ) : (
@@ -118,18 +133,14 @@ export default function Home() {
             ))}
           </div>
         </section>
-        <section className={styles.reportSection}>
-          <div className={styles.reportCard} data-tags={latestReport.tags.join(' ')}>
+        {latestReport && <section className={styles.reportSection}>
+          <div className={styles.reportCard} data-tags={(latestReport.tags || []).join(' ')}>
             <div className={styles.reportContent}>
               <p className={styles.reportEyebrow}>Latest Report</p>
               <h2>{latestReport.title}</h2>
               <p className={styles.reportDescription}>{latestReport.description || latestReport.summary}</p>
               <div className={styles.reportActions}>
-                {latestReport.readOnlinePath ? (
-                  latestReport.staticHtml
-                    ? <a href={reportReadOnlineUrl}>Read Online</a>
-                    : <Link to={latestReport.readOnlinePath}>Read Online</Link>
-                ) : <span>Read Online</span>}
+                {reportReadOnlineUrl ? <a href={reportReadOnlineUrl}>Read Online</a> : <span>Read Online</span>}
                 {latestReport.pdfUrl ? (
                   <a href={reportPdfUrl} target="_blank" rel="noreferrer">Download PDF <span aria-hidden="true">&#8594;</span></a>
                 ) : <span>Download PDF <span aria-hidden="true">&#8594;</span></span>}
@@ -142,7 +153,7 @@ export default function Home() {
               {latestReport.coverImage ? <img src={reportCoverUrl} alt={`${latestReport.title} cover`} /> : <span>Latest<br />Report</span>}
             </div>
           </div>
-        </section>
+        </section>}
       </main>
     </Layout>
   );

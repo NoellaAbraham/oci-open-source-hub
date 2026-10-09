@@ -2,6 +2,9 @@
 .header { padding: var(--site-page-heading-top) max(clamp(1.25rem, 4vw, 5rem), calc((100vw - 1320px) / 2)) clamp(2rem, 4vw, 3.5rem); border-bottom: 1px solid var(--site-border); }
 .header h1 { margin: 0; color: var(--site-text); font-size: var(--site-page-title-size); font-weight: 400; letter-spacing: var(--site-page-title-tracking); line-height: 1; }
 .header p { max-width: 620px; margin: 1.25rem 0 0; color: var(--site-muted); font-size: clamp(1.05rem, 1.6vw, 1.25rem); line-height: 1.5; }
+.editorButton { display: inline-flex; margin-top: 1.25rem; padding: .75rem 1.1rem; color: #fff; background: var(--oci-terracotta); border: 0; font: inherit; font-weight: 700; cursor: pointer; }
+.editorButton:hover { background: #a93425; }
+.notice { max-width: 1320px; margin: 0 auto 1.5rem; color: #f5b99d; }
 .catalog { padding: 2.5rem clamp(1.25rem, 4vw, 5rem) 5rem; }
 .catalogControls { margin-bottom: 2rem; display: flex; align-items: flex-start; gap: 1.25rem; border-bottom: 1px solid var(--site-border); }
 .tabs { flex: 1; margin: 0; display: flex; flex-wrap: wrap; gap: 0.5rem 1.8rem; }
@@ -32,6 +35,7 @@
 .srOnly { position: absolute; width: 1px; height: 1px; padding: 0; overflow: hidden; clip: rect(0, 0, 0, 0); white-space: nowrap; border: 0; }
 .videoFrame { height: 88px; flex: 0 0 88px; position: relative; display: grid; place-items: center; overflow: hidden; border-bottom: 1px solid var(--site-border); background: #1c1c1c; }
 .videoFrame img { width: 100%; height: 100%; object-fit: contain; }
+.videoFrame video { width: 100%; height: 100%; object-fit: contain; }
 .playButton { width: 2.6rem; height: 2.6rem; position: absolute; display: grid; place-items: center; border: 1px solid #fff; border-radius: 50%; background: rgba(0, 0, 0, 0.36); }
 .playButton::before { content: ''; margin-left: 0.14rem; border-top: 0.31rem solid transparent; border-bottom: 0.31rem solid transparent; border-left: 0.48rem solid #fff; }
 .videoCard:hover .playButton, .videoCard:focus-visible .playButton { border-color: var(--oci-terracotta); background: var(--oci-terracotta); }

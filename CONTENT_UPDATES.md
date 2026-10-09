@@ -1,33 +1,17 @@
-# Updating site content through GitHub
+# Updating site content
 
-Only repository collaborators can make these changes. Put new source material into the matching `*-to-add` folder first. On GitHub, open the relevant data file, choose **Edit**, make the change, then use **Commit changes**. The website is rebuilt after the change is merged into the publishing branch.
+The Services, Demos & Resources, and Reports pages each have an **Edit** button. Click it, enter the VM editor password, and add, edit, or delete an entry. Each editor has a close **×** button. Changes to the live VM catalog appear after the page refreshes; GitHub Pages does not need to rebuild for content edits.
 
-## Add a service from the website
+## Services
 
-1. On the Services page, choose **Edit services** and enter the editor password.
-2. Enter the service name, at least one category, a short description, and optional URL or existing logo path.
-3. Choose **Add service**. The API saves a new JSON file and the service appears after the catalog refreshes. A site rebuild is not required.
-4. To remove a service, reopen **Edit services**, unlock it, choose the service under **Delete a service**, and confirm. Deletion takes effect on refresh.
+Use **Edit services** to add or delete a service. Enter its name, category, description, optional URL, and an existing logo path. The logo file must already be on the published site. Leave it blank for a letter icon.
 
-The editor API and persistent data directory must be deployed separately from GitHub Pages. See `backend/README.md`.
+## Demos & Resources
 
-## Add a report
+Use **Edit demos & resources** to choose an existing item or add one. Enter the title, category, card type, creator, description, and URL. For a demo, add a video link or upload an MP4/WebM file up to 10 MB. Larger videos should use a link.
 
-1. Upload the PDF to `static/reports/` and any cover image to `static/img/reports/`.
-2. Open `src/data/reports.js`.
-3. Copy the existing report object and update the title, dates, summary, file paths, links, and tags.
-4. If the report needs a long in-site reading page like the June report, ask a developer to add that page. Otherwise link the Read Online button to the public PDF or slides.
+## Reports
 
-## Add a service logo
+Use **Edit reports** to choose an existing report or add one. Enter the title, reporting period, date, summary, and optional creator. You can upload a self-contained HTML report and cover image, and enter PDF and slide deck URLs. An uploaded HTML report takes priority over the existing read-online page URL.
 
-Upload the logo to `static/img/services/` and deploy the website first. Then use its `/img/services/<filename>` path in the service editor. The editor checks that the file is available before saving. Leave the path empty to show a letter icon.
-
-## Add a demo or resource
-
-1. Open `src/data/demosResources.js`.
-2. Copy the placeholder object, then update its `id`, `category`, `type`, `title`, `description`, `url`, and `tags`.
-3. Use one of these categories: `demo`, `github`, `article`, or `diagram`.
-
-## Important
-
-Do not add passwords, private links, API keys, or customer information to these files. Everything published through GitHub Pages is public.
+The editor API and persistent files are on the OCI VM. The VM and gateway must be available for editing and uploads. See `backend/README.md` for deployment and backup instructions. Do not upload passwords, API keys, or private customer data; catalog entries and uploads are public.

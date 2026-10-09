@@ -2,15 +2,20 @@
 .header { width: min(100%, 1320px); margin: 0 auto; padding-bottom: clamp(2rem, 4vw, 3.5rem); border-bottom: 1px solid var(--site-border); }
 .header h1 { margin: 0; color: var(--site-text); font-size: var(--site-page-title-size); font-weight: 400; letter-spacing: var(--site-page-title-tracking); line-height: 1; }
 .header p { max-width: 620px; margin: 1.25rem 0 0; color: var(--site-muted); font-size: clamp(1.05rem, 1.6vw, 1.25rem); line-height: 1.5; }
+.editorButton { display: inline-flex; margin-top: 1.25rem; padding: .75rem 1.1rem; color: #fff; background: var(--oci-terracotta); border: 0; font: inherit; font-weight: 700; cursor: pointer; }
+.editorButton:hover { background: #a93425; }
+.notice { max-width: 1320px; margin: 1.5rem auto 0; color: #f5b99d; }
 .list { width: min(100%, 1320px); margin: 0 auto; }
 .report { padding: clamp(2rem, 4vw, 3rem) 0; display: grid; grid-template-columns: 220px minmax(0, 1fr) auto; align-items: center; gap: clamp(1.5rem, 4vw, 3.5rem); border-bottom: 1px solid var(--site-border); }
 .cover { width: 220px; aspect-ratio: 16 / 6; display: block; overflow: hidden; }
 .cover img { width: 100%; height: 100%; display: block; object-fit: cover; object-position: center top; transition: transform 180ms ease; }
+.coverPlaceholder { width: 100%; height: 100%; display: grid; place-items: center; color: var(--site-muted); background: #211d1b; border: 1px solid var(--site-border); }
 .cover:hover img { transform: scale(1.025); }
 .details h2 { margin: 0; font-size: clamp(1.15rem, 2vw, 1.45rem); line-height: 1.25; }
 .details h2 a { color: var(--site-text); text-decoration: none; }
 .details h2 a:hover { color: var(--oci-terracotta); }
 .period { margin: 1rem 0 0; color: var(--oci-terracotta); font-size: 0.88rem; font-weight: 700; }
+.creator { margin: .45rem 0 0; color: var(--site-muted); font-size: .86rem; }
 .summary { max-width: 600px; margin: 0.45rem 0 0; color: var(--site-muted); font-size: 0.95rem; line-height: 1.55; }
 .actions { display: flex; gap: 0.55rem; }
 .actions a { min-height: 2.5rem; padding: 0.55rem 0.8rem; display: inline-flex; align-items: center; justify-content: center; color: var(--site-text); border: 1px solid var(--site-border); font-size: 0.86rem; text-decoration: none; white-space: nowrap; }
