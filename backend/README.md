@@ -21,7 +21,15 @@ Each collection seeds once from `backend/seed-services.json`, `backend/seed-reso
 | `/api/reports` | GET, POST, PUT, DELETE, OPTIONS | Report catalog |
 | `/api/media` | GET, POST, OPTIONS | Public uploaded files and authenticated uploads |
 
-For the four new routes, configure the OCI API Gateway with HTTP back ends pointing to the VM's private IP on port 3000 at the same path. Preserve query strings for `/api/media`. Continue forwarding the existing routes. Set `SITE_ORIGIN=https://noellaabraham.github.io` in the VM environment. The Docusaurus build uses `SERVICE_API_URL`; its production default is the current gateway URL.
+In the OCI API Gateway deployment, add these **three routes**. For each route, choose an **HTTP** back end and enter the full **HTTP URL** shown below:
+
+| Gateway route path | Methods | HTTP back-end URL |
+| --- | --- | --- |
+| `/api/resources` | GET, POST, PUT, DELETE, OPTIONS | `http://10.10.220.80:3000/api/resources` |
+| `/api/reports` | GET, POST, PUT, DELETE, OPTIONS | `http://10.10.220.80:3000/api/reports` |
+| `/api/media` | GET, POST, OPTIONS | `http://10.10.220.80:3000/api/media` |
+
+The public URLs use the existing gateway base, for example `https://ot4nerzcs4bqcj2o6tpvqx3fsq.apigateway.eu-frankfurt-1.oci.customer-oci.com/api/resources`. Preserve query strings on `/api/media`, including `?file=...` for downloads and `?kind=...&name=...` for uploads. Keep the existing `/health`, `/api/editor/verify`, and `/api/services` routes. Set `SITE_ORIGIN=https://noellaabraham.github.io` in the VM environment. The Docusaurus build uses `SERVICE_API_URL`; its production default is this gateway base URL.
 
 Videos accept MP4 or WebM up to 10 MB; HTML reports and cover images accept up to 2 MB. The [OCI API Gateway request body limit is 20 MB](https://docs.oracle.com/en-us/iaas/Content/APIGateway/Reference/apigatewaylimits.htm), so link larger videos from a video host. Uploaded HTML should be self-contained or use absolute URLs for its assets. Uploaded files are publicly readable through `/api/media`.
 
