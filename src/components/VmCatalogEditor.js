@@ -117,8 +117,11 @@ export default function VmCatalogEditor({kind, apiUrl, items, onSaved, onClose, 
 
   return <div className={styles.backdrop}>
     <section className={styles.panel} role="dialog" aria-modal="true" aria-label={`Edit ${kind}`}>
-      <button className={styles.close} type="button" onClick={onClose} aria-label="Close editor">×</button>
-      <h2>{token ? `Manage ${kind === 'resources' ? 'demos & resources' : 'reports'}` : 'Unlock editor'}</h2>
+      <div className={styles.header}>
+        <h2>{token ? `Manage ${kind === 'resources' ? 'demos & resources' : 'reports'}` : 'Unlock editor'}</h2>
+        <button className={styles.close} type="button" onClick={onClose} aria-label="Close editor">×</button>
+      </div>
+      <div className={styles.body}>
       {error && <p className={styles.error} role="alert">{error}</p>}
       {!token ? <form onSubmit={unlock}>
         <label className={styles.field}><span>Editor password</span><input type="password" value={password} onChange={(event) => setPassword(event.target.value)} required /></label>
@@ -161,6 +164,7 @@ export default function VmCatalogEditor({kind, apiUrl, items, onSaved, onClose, 
         </form>
         {selectedId && <button className={styles.delete} type="button" disabled={saving} onClick={remove}>Delete {label}</button>}
       </>}
+      </div>
     </section>
   </div>;
 }
