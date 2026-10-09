@@ -12,6 +12,7 @@ export default function ReportsPage() {
   const baseUrl = useBaseUrl('/');
   const [reports, setReports] = useState(builtInReports);
   const [catalogError, setCatalogError] = useState('');
+  const [apiReady, setApiReady] = useState(false);
   const [editorOpen, setEditorOpen] = useState(false);
 
   async function loadReports() {
@@ -21,9 +22,13 @@ export default function ReportsPage() {
     if (!Array.isArray(data.reports)) throw new Error('Report API returned an invalid list.');
     setReports(data.reports);
     setCatalogError('');
+    setApiReady(true);
   }
 
-  useEffect(() => { loadReports().catch(() => setCatalogError('Live reports are unavailable. Showing the built-in catalog.')); }, [apiUrl]);
+  useEffect(() => { loadReports().catch(() => {
+    setApiReady(false);
+    setCatalogError('Live reports are unavailable. Showing the built-in catalog.');
+  }); }, [apiUrl]);
 
   function href(path) {
     if (!path) return '';
@@ -36,7 +41,7 @@ export default function ReportsPage() {
       <header className={styles.header}>
         <h1>Open Source Reports</h1>
         <p>Quarterly reports covering key enhancements and updates.</p>
-        <button className={styles.editorButton} type="button" onClick={() => setEditorOpen(true)}>Edit reports</button>
+        <button className={styles.editorButton} type="button" disabled={!apiReady} onClick={() => setEditorOpen(true)}>Edit reports</button>
       </header>
       <section className={styles.list} aria-label="Available reports">
         {catalogError && <p className={styles.notice} role="status">{catalogError}</p>}

@@ -4,6 +4,7 @@
 .header p { max-width: 620px; margin: 1.25rem 0 0; color: var(--site-muted); font-size: clamp(1.05rem, 1.6vw, 1.25rem); line-height: 1.5; }
 .editorButton { display: inline-flex; margin-top: 1.25rem; padding: .75rem 1.1rem; color: #fff; background: var(--oci-terracotta); border: 0; font: inherit; font-weight: 700; cursor: pointer; }
 .editorButton:hover { background: #a93425; }
+.editorButton:disabled { opacity: .55; cursor: not-allowed; }
 .notice { max-width: 1320px; margin: 0 auto 1.5rem; color: #f5b99d; }
 .catalog { padding: 2.5rem clamp(1.25rem, 4vw, 5rem) 5rem; }
 .catalogControls { margin-bottom: 2rem; display: flex; align-items: flex-start; gap: 1.25rem; border-bottom: 1px solid var(--site-border); }

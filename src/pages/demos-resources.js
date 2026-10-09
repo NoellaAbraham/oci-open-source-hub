@@ -23,6 +23,7 @@ export default function DemosResources() {
   const baseUrl = useBaseUrl('/');
   const [items, setItems] = useState(builtInItems);
   const [catalogError, setCatalogError] = useState('');
+  const [apiReady, setApiReady] = useState(false);
   const [editorOpen, setEditorOpen] = useState(false);
   const [activeCategory, setActiveCategory] = useState('all');
   const [selectedTags, setSelectedTags] = useState([]);
@@ -36,9 +37,13 @@ export default function DemosResources() {
     if (!Array.isArray(data.resources)) throw new Error('Resource API returned an invalid list.');
     setItems(data.resources);
     setCatalogError('');
+    setApiReady(true);
   }
 
-  useEffect(() => { loadItems().catch(() => setCatalogError('Live resources are unavailable. Showing the built-in catalog.')); }, [apiUrl]);
+  useEffect(() => { loadItems().catch(() => {
+    setApiReady(false);
+    setCatalogError('Live resources are unavailable. Showing the built-in catalog.');
+  }); }, [apiUrl]);
   useEffect(() => {
     const updateBackToTop = () => setShowBackToTop(window.scrollY > 400);
     updateBackToTop();
@@ -66,7 +71,7 @@ export default function DemosResources() {
       <header className={styles.header}>
         <h1>Demos &amp; Resources</h1>
         <p>Explore demos, repositories, articles, and architecture resources for Oracle Cloud open source services.</p>
-        <button className={styles.editorButton} type="button" onClick={() => setEditorOpen(true)}>Edit demos &amp; resources</button>
+        <button className={styles.editorButton} type="button" disabled={!apiReady} onClick={() => setEditorOpen(true)}>Edit demos &amp; resources</button>
       </header>
       <section className={styles.catalog}>
         {catalogError && <p className={styles.notice} role="status">{catalogError}</p>}

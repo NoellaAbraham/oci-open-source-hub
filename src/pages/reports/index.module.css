@@ -4,6 +4,7 @@
 .header p { max-width: 620px; margin: 1.25rem 0 0; color: var(--site-muted); font-size: clamp(1.05rem, 1.6vw, 1.25rem); line-height: 1.5; }
 .editorButton { display: inline-flex; margin-top: 1.25rem; padding: .75rem 1.1rem; color: #fff; background: var(--oci-terracotta); border: 0; font: inherit; font-weight: 700; cursor: pointer; }
 .editorButton:hover { background: #a93425; }
+.editorButton:disabled { opacity: .55; cursor: not-allowed; }
 .notice { max-width: 1320px; margin: 1.5rem auto 0; color: #f5b99d; }
 .list { width: min(100%, 1320px); margin: 0 auto; }
 .report { padding: clamp(2rem, 4vw, 3rem) 0; display: grid; grid-template-columns: 220px minmax(0, 1fr) auto; align-items: center; gap: clamp(1.5rem, 4vw, 3.5rem); border-bottom: 1px solid var(--site-border); }
