@@ -1,43 +1,10 @@
 # OCI Open Source Hub
 
-This website is the Oracle Cloud open source hub. Editors can update services, demos, resources, and reports through the VM-backed forms on each page. See `CONTENT_UPDATES.md` for the editor workflow and `backend/README.md` for VM deployment.
+[OCI Open Source Hub](https://noellaabraham.github.io/oci-open-source-hub/) brings together Oracle Cloud Infrastructure open source services, demos, learning resources, and reports in one website. Visitors can browse the catalogs and follow links to projects, videos, and publications.
 
-## Installation
+## Technology
 
-```bash
-npm install
-```
-
-**Note**: feel free to use the package manager of your choice.
-
-## Local Development
-
-```bash
-npm run start
-```
-
-This command starts a local development server and opens up a browser window. Most changes are reflected live without having to restart the server.
-
-## Build
-
-```bash
-npm run build
-```
-
-This command generates static content into the `build` directory and can be served using any static contents hosting service.
-
-## Deployment
-
-Using SSH:
-
-```bash
-USE_SSH=true npm run deploy
-```
-
-Not using SSH:
-
-```bash
-GIT_USER=<Your GitHub username> npm run deploy
-```
-
-If you are using GitHub Pages for hosting, this command is a convenient way to build the website and push to the `gh-pages` branch.
+- **Docusaurus 3 and React 19** build the website.
+- **JavaScript and CSS** power the pages and interactive catalogs.
+- **GitHub Pages and GitHub Actions** host and deploy the website.
+- **Node.js on Oracle Cloud Infrastructure**, reached through **OCI API Gateway**, provides the live catalogs and content editor.

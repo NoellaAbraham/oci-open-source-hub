@@ -178,8 +178,11 @@ export default function Services() {
       </section>
       {editorOpen && <div className={styles.editorBackdrop}>
         <section className={styles.editorPanel} aria-label="Service editor">
-          <button className={styles.closeEditor} type="button" onClick={() => setEditorOpen(false)} aria-label="Close editor">×</button>
-          <h2>{editorToken ? 'Manage services' : 'Unlock service editor'}</h2>
+          <div className={styles.editorHeader}>
+            <h2>{editorToken ? 'Manage services' : 'Unlock service editor'}</h2>
+            <button className={styles.closeEditor} type="button" onClick={() => setEditorOpen(false)} aria-label="Close editor">×</button>
+          </div>
+          <div className={styles.editorBody}>
           {editorError && <p className={styles.editorError} role="alert">{editorError}</p>}
           {!editorToken ? <form onSubmit={unlockEditor}>
             <label htmlFor="editor-password">Editor password</label>
@@ -207,6 +210,7 @@ export default function Services() {
               </select>
               <button type="submit" disabled={saving || !selectedServiceId}>Delete service</button>
             </form></>}
+          </div>
         </section>
       </div>}
     </main>
