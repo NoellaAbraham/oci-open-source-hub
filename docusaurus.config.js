@@ -60,19 +60,7 @@ const config = {
     ],
   ],
 
-  themes: [
-  [
-    require.resolve('@easyops-cn/docusaurus-search-local'),
-      {
-      hashed: true,
-      language: ['en'],
-      indexDocs: false,
-      indexBlog: false,
-      indexPages: true,
-      },
-    ],
-  ],
-
+  
   themeConfig:
     /** @type {import('@docusaurus/preset-classic').ThemeConfig} */
     ({
@@ -110,10 +98,6 @@ const config = {
           {
             to: '/demos-resources',
             label: 'Demos & Resources',
-            position: 'right',
-          },
-          {
-            type: 'search',
             position: 'right',
           },
         ],
