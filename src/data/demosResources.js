@@ -2,7 +2,7 @@
 // `tags` are ready for future filtering pages. Use a public URL for `url`.
 export const demoResourceCategories = [
   {id: 'all', label: 'All Resources'},
-  {id: 'demo', label: 'Demos'},
+  {id: 'demo', label: 'Videos & Tutorials'},
   {id: 'github', label: 'GitHub'},
   {id: 'article', label: 'Articles'},
   {id: 'diagram', label: 'Architecture Diagrams'},
