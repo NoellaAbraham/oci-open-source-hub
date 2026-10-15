@@ -4,6 +4,7 @@ import {mkdir, readFile, readdir, rename, stat, unlink, writeFile} from 'node:fs
 import {dirname, join, resolve} from 'node:path';
 import {homedir} from 'node:os';
 import {fileURLToPath} from 'node:url';
+import {createServiceGithubSync} from './github-services.mjs';
 
 const root = dirname(fileURLToPath(import.meta.url));
 const dataDir = resolve(process.env.SERVICE_DATA_DIR || join(root, 'data', 'services'));
@@ -15,6 +16,13 @@ const legacyFile = process.env.LEGACY_SERVICE_FILE || join(homedir(), '.local', 
 const siteOrigin = process.env.SITE_ORIGIN || 'http://localhost:3000';
 const editorPassword = process.env.EDITOR_PASSWORD;
 const port = Number(process.env.PORT || 3001);
+const githubServices = createServiceGithubSync({
+  enabled: process.env.GITHUB_SERVICES_SYNC === 'true',
+  repository: process.env.GITHUB_REPOSITORY,
+  branch: process.env.GITHUB_BRANCH || 'main',
+  token: process.env.GITHUB_TOKEN,
+});
+let githubSyncPending = githubServices.enabled;
 const sessions = new Map();
 const loginAttempts = new Map();
 const sessionLifetime = 8 * 60 * 60 * 1000;
@@ -223,6 +231,26 @@ async function listServices() {
   return services.sort((a, b) => a.name.localeCompare(b.name));
 }
 
+async function syncServicesToGithub() {
+  if (!githubServices.enabled) return {status: 'disabled'};
+  githubSyncPending = true;
+  try {
+    const result = await githubServices.sync(await listServices());
+    githubSyncPending = false;
+    return result;
+  } catch {
+    // The VM remains authoritative. A restart also retries its complete catalog.
+    console.error('Service catalog saved on VM; GitHub sync pending. Check GitHub credentials, branch permissions and network access.');
+    return {status: 'pending'};
+  }
+}
+
+async function changeServiceAndSync(change) {
+  const result = await change();
+  if (result.error) return result;
+  return {...result, githubSync: await syncServicesToGithub()};
+}
+
 async function readJson(request) {
   if (!String(request.headers['content-type'] || '').startsWith('application/json')) throw new Error('Expected JSON.');
   const chunks = [];
@@ -366,16 +394,16 @@ async function handler(request, response) {
   if (request.method === 'POST' && path === '/api/services') {
     if (!authorized(request)) return send(request, response, 401, {error: 'Unlock the editor first.'});
     const value = await readJson(request);
-    const result = await (writes = writes.catch(() => {}).then(() => addService(value)));
+    const result = await (writes = writes.catch(() => {}).then(() => changeServiceAndSync(() => addService(value))));
     if (result.error) return send(request, response, result.status, {error: result.error});
-    return send(request, response, 201, {service: result.service});
+    return send(request, response, 201, {service: result.service, githubSync: result.githubSync});
   }
   if (request.method === 'DELETE' && path === '/api/services') {
     if (!authorized(request)) return send(request, response, 401, {error: 'Unlock the editor first.'});
     const value = await readJson(request);
-    const result = await (writes = writes.catch(() => {}).then(() => deleteService(value)));
+    const result = await (writes = writes.catch(() => {}).then(() => changeServiceAndSync(() => deleteService(value))));
     if (result.error) return send(request, response, result.status, {error: result.error});
-    return send(request, response, 200, {deleted: result.id});
+    return send(request, response, 200, {deleted: result.id, githubSync: result.githubSync});
   }
   const collection = path === '/api/resources' ? 'resources' : path === '/api/reports' ? 'reports' : null;
   if (collection && ['POST', 'PUT', 'DELETE'].includes(request.method)) {
@@ -397,3 +425,13 @@ createServer((request, response) => handler(request, response).catch((error) => 
   const status = /too large/i.test(error.message) ? 413 : error.code ? 500 : 400;
   if (!response.headersSent) send(request, response, status, {error: error.message});
 })).listen(port, '0.0.0.0', () => console.log(`Service API listening on ${port}`));
+
+// Retry failed syncs and reconcile existing VM data on startup. Use the same
+// queue as editor writes so a retry cannot publish an older service snapshot.
+if (githubServices.enabled) {
+  const retryGithub = () => {
+    writes = writes.catch(() => {}).then(() => githubSyncPending ? syncServicesToGithub() : undefined);
+  };
+  retryGithub();
+  setInterval(retryGithub, 60_000).unref();
+}

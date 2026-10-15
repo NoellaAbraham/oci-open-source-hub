@@ -51,6 +51,7 @@ export default function Services() {
   const apiUrl = String(siteConfig.customFields.serviceApiUrl).replace(/\/$/, '');
   const [services, setServices] = useState(builtInServices);
   const [catalogError, setCatalogError] = useState('');
+  const [saveNotice, setSaveNotice] = useState('');
   const [editorOpen, setEditorOpen] = useState(false);
   const [editorToken, setEditorToken] = useState('');
   const [password, setPassword] = useState('');
@@ -107,6 +108,14 @@ export default function Services() {
       ? current.categories.filter((item) => item !== id) : [...current.categories, id]}));
   }
 
+  function showSaveNotice(sync) {
+    setSaveNotice(sync?.status === 'synced'
+      ? 'Saved to the live catalog and GitHub. The website backup will update after deployment.'
+      : sync?.status === 'pending'
+        ? 'Saved to the live catalog. GitHub backup is pending; the server will retry automatically.'
+        : 'Saved to the live catalog. GitHub backup is not configured on the server.');
+  }
+
   async function addService(event) {
     event.preventDefault();
     setEditorError('');
@@ -125,6 +134,7 @@ export default function Services() {
       });
       const data = await response.json();
       if (!response.ok) throw new Error(data.error || 'Could not add the service.');
+      showSaveNotice(data.githubSync);
       await loadServices();
       setDraft({name: '', categories: [], description: '', url: '', image: ''});
       setEditorOpen(false);
@@ -147,6 +157,7 @@ export default function Services() {
       });
       const data = await response.json();
       if (!response.ok) throw new Error(data.error || 'Could not delete the service.');
+      showSaveNotice(data.githubSync);
       await loadServices();
       setSelectedServiceId('');
       setEditorOpen(false);
@@ -167,6 +178,7 @@ export default function Services() {
       </header>
       <section className={styles.catalog}>
         {catalogError && <p className={styles.notice} role="status">{catalogError}</p>}
+        {saveNotice && <p className={styles.notice} role="status">{saveNotice}</p>}
         <div className={styles.catalogControls}>
           <div className={styles.tabs} role="tablist" aria-label="Service categories">
             {serviceCategories.map((category) => <button key={category.id} type="button" role="tab" aria-selected={activeCategory === category.id} className={activeCategory === category.id ? styles.activeTab : ''} onClick={() => setActiveCategory(category.id)}>{category.label}</button>)}

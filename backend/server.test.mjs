@@ -1,11 +1,11 @@
 import assert from 'node:assert/strict';
 import {spawn} from 'node:child_process';
-import {mkdtemp, readFile, readdir, rm} from 'node:fs/promises';
+import {mkdtemp, readFile, readdir, rm, writeFile} from 'node:fs/promises';
 import {createServer} from 'node:net';
 import {tmpdir} from 'node:os';
 import {join} from 'node:path';
 import {test} from 'node:test';
-import {fileURLToPath} from 'node:url';
+import {fileURLToPath, pathToFileURL} from 'node:url';
 
 async function freePort() {
   const server = createServer();
@@ -15,9 +15,9 @@ async function freePort() {
   return port;
 }
 
-async function start(port, dir) {
-  const child = spawn(process.execPath, [fileURLToPath(new URL('./server.mjs', import.meta.url))], {
-    env: {...process.env, PORT: String(port), SERVICE_DATA_DIR: dir, RESOURCE_DATA_DIR: join(dir, 'resources'), REPORT_DATA_DIR: join(dir, 'reports'), MEDIA_DATA_DIR: join(dir, 'media'), LEGACY_SERVICE_FILE: join(dir, 'previous-catalog.json'), SITE_ORIGIN: 'http://localhost:3000', EDITOR_PASSWORD: 'test-password'},
+async function start(port, dir, extraEnv = {}, preload) {
+  const child = spawn(process.execPath, [...(preload ? ['--import', pathToFileURL(preload).href] : []), fileURLToPath(new URL('./server.mjs', import.meta.url))], {
+    env: {...process.env, GITHUB_SERVICES_SYNC: 'false', PORT: String(port), SERVICE_DATA_DIR: dir, RESOURCE_DATA_DIR: join(dir, 'resources'), REPORT_DATA_DIR: join(dir, 'reports'), MEDIA_DATA_DIR: join(dir, 'media'), LEGACY_SERVICE_FILE: join(dir, 'previous-catalog.json'), SITE_ORIGIN: 'http://localhost:3000', EDITOR_PASSWORD: 'test-password', ...extraEnv},
     stdio: 'pipe',
   });
   const base = `http://127.0.0.1:${port}`;
@@ -79,6 +79,63 @@ test('editor authorization, service creation, deletion, and persistence', async 
     await stop(server.child);
     server = await start(port, dir);
     assert.equal((await (await fetch(`${server.base}/api/services`)).json()).services.length, 0);
+  } finally {
+    if (server && server.child.exitCode === null) await stop(server.child);
+    await rm(dir, {recursive: true, force: true});
+  }
+});
+
+test('service save survives GitHub failure and restart retries the full catalog; deletion syncs too', async () => {
+  const dir = await mkdtemp(join(tmpdir(), 'hub-github-'));
+  const port = await freePort();
+  const preload = join(dir, 'mock-github.mjs');
+  const modeFile = join(dir, 'github-mode');
+  const snapshotFile = join(dir, 'github-snapshot');
+  // Test-only preload intercepts GitHub calls; no token or real network is used.
+  await writeFile(preload, `
+    import {readFile, writeFile} from 'node:fs/promises';
+    const realFetch = globalThis.fetch;
+    globalThis.fetch = async (url, options) => {
+      if (!String(url).startsWith('https://api.github.com/')) return realFetch(url, options);
+      if ((await readFile(process.env.MOCK_MODE, 'utf8')) === 'fail') return Response.json({}, {status: 403});
+      if (!options.method) return Response.json({}, {status: 404});
+      const body = JSON.parse(options.body);
+      await writeFile(process.env.MOCK_SNAPSHOT, Buffer.from(body.content, 'base64'));
+      return Response.json({}, {status: 201});
+    };
+  `);
+  await writeFile(modeFile, 'fail');
+  const env = {GITHUB_SERVICES_SYNC: 'true', GITHUB_REPOSITORY: 'test/hub', GITHUB_TOKEN: 'fake-token', MOCK_MODE: modeFile, MOCK_SNAPSHOT: snapshotFile};
+  let server;
+  try {
+    server = await start(port, dir, env, preload);
+    const unlock = async () => (await (await fetch(`${server.base}/api/editor/verify`, {
+      method: 'POST', headers: {'Content-Type': 'application/json'}, body: JSON.stringify({password: 'test-password'}),
+    })).json()).token;
+    const token = await unlock();
+    const created = await fetch(`${server.base}/api/services`, {
+      method: 'POST', headers: {'Content-Type': 'application/json', Authorization: `Bearer ${token}`},
+      body: JSON.stringify({name: 'Synced Service', categories: ['search'], description: 'A service kept in GitHub as well.'}),
+    });
+    assert.equal(created.status, 201);
+    assert.deepEqual((await created.json()).githubSync, {status: 'pending'});
+    assert.equal(JSON.parse(await readFile(join(dir, 'synced-service.json'), 'utf8')).name, 'Synced Service');
+    await stop(server.child);
+    await writeFile(modeFile, 'ok');
+    server = await start(port, dir, env, preload);
+    let snapshot;
+    for (let i = 0; i < 100; i++) {
+      try { snapshot = JSON.parse(await readFile(snapshotFile, 'utf8')); break; } catch { /* Startup sync pending. */ }
+      await new Promise((resolve) => setTimeout(resolve, 20));
+    }
+    assert.ok(snapshot.some((item) => item.name === 'Synced Service'));
+    const deleted = await fetch(`${server.base}/api/services`, {
+      method: 'DELETE', headers: {'Content-Type': 'application/json', Authorization: `Bearer ${await unlock()}`},
+      body: JSON.stringify({id: 'synced-service'}),
+    });
+    assert.equal(deleted.status, 200);
+    assert.deepEqual((await deleted.json()).githubSync, {status: 'synced'});
+    assert.ok(!JSON.parse(await readFile(snapshotFile, 'utf8')).some((item) => item.name === 'Synced Service'));
   } finally {
     if (server && server.child.exitCode === null) await stop(server.child);
     await rm(dir, {recursive: true, force: true});
