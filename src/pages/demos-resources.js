@@ -3,14 +3,9 @@ import useBaseUrl from '@docusaurus/useBaseUrl';
 import useDocusaurusContext from '@docusaurus/useDocusaurusContext';
 import Layout from '@theme/Layout';
 import VmCatalogEditor from '@site/src/components/VmCatalogEditor';
-import {demoResourceCategories, demosResources, resourceServiceTags} from '@site/src/data/demosResources';
-import {coachingSessions} from '@site/src/data/coachingSessions';
+import {demoResourceCategories, resources as builtInItems, resourceServiceTags} from '@site/src/data/demosResources';
+import {githubSaveNotice} from '@site/src/components/githubSaveNotice';
 import styles from './demos-resources.module.css';
-
-const builtInItems = [...demosResources, ...coachingSessions.map((session) => ({
-  ...session, category: 'demo', type: 'Developer coaching session', creator: session.speaker,
-  description: session.focus, url: `https://www.youtube.com/watch?v=${session.youtubeId}`,
-}))];
 
 function videoIdFor(item) {
   if (item.videoFile) return null;
@@ -23,6 +18,7 @@ export default function DemosResources() {
   const baseUrl = useBaseUrl('/');
   const [items, setItems] = useState(builtInItems);
   const [catalogError, setCatalogError] = useState('');
+  const [saveNotice, setSaveNotice] = useState('');
   const [apiReady, setApiReady] = useState(false);
   const [editorOpen, setEditorOpen] = useState(false);
   const [activeCategory, setActiveCategory] = useState('all');
@@ -75,6 +71,7 @@ export default function DemosResources() {
       </header>
       <section className={styles.catalog}>
         {catalogError && <p className={styles.notice} role="status">{catalogError}</p>}
+        {saveNotice && <p className={styles.notice} role="status">{saveNotice}</p>}
         <div className={styles.catalogControls}>
           <div className={styles.tabs} role="tablist" aria-label="Resource categories">
             {demoResourceCategories.map((category) => <button key={category.id} type="button" role="tab" aria-selected={activeCategory === category.id} className={activeCategory === category.id ? styles.activeTab : ''} onClick={() => setActiveCategory(category.id)}>{category.label}</button>)}
@@ -117,7 +114,7 @@ export default function DemosResources() {
           })}
         </div>}
       </section>
-      {editorOpen && <VmCatalogEditor kind="resources" apiUrl={apiUrl} items={items} onSaved={loadItems} onClose={() => setEditorOpen(false)} serviceTags={resourceServiceTags} />}
+      {editorOpen && <VmCatalogEditor kind="resources" apiUrl={apiUrl} items={items} onSaved={async (sync) => {setSaveNotice(githubSaveNotice(sync)); await loadItems();}} onClose={() => setEditorOpen(false)} serviceTags={resourceServiceTags} />}
     </main>
     {showBackToTop && <button className={styles.backToTop} type="button" onClick={() => window.scrollTo({top: 0, behavior: 'smooth'})} aria-label="Back to top" title="Back to top">↑</button>}
   </Layout>;

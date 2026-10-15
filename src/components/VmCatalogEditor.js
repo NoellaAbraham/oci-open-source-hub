@@ -76,12 +76,12 @@ export default function VmCatalogEditor({kind, apiUrl, items, onSaved, onClose, 
       if (files.videoFile) value.videoFile = await upload('video', files.videoFile);
       if (files.htmlFile) value.htmlFile = await upload('html', files.htmlFile);
       if (files.coverImage) value.coverImage = await upload('image', files.coverImage);
-      await jsonResponse(await fetch(`${apiUrl}/api/${kind}`, {
+      const saved = await jsonResponse(await fetch(`${apiUrl}/api/${kind}`, {
         method: selectedId ? 'PUT' : 'POST',
         headers: {'Content-Type': 'application/json', Authorization: `Bearer ${token}`},
         body: JSON.stringify(value),
       }));
-      await onSaved();
+      await onSaved(saved.githubSync);
       onClose();
     } catch (failure) { setError(failure.message); }
     finally { setSaving(false); }
@@ -92,11 +92,11 @@ export default function VmCatalogEditor({kind, apiUrl, items, onSaved, onClose, 
     setError('');
     setSaving(true);
     try {
-      await jsonResponse(await fetch(`${apiUrl}/api/${kind}`, {
+      const saved = await jsonResponse(await fetch(`${apiUrl}/api/${kind}`, {
         method: 'DELETE', headers: {'Content-Type': 'application/json', Authorization: `Bearer ${token}`},
         body: JSON.stringify({id: selectedId}),
       }));
-      await onSaved();
+      await onSaved(saved.githubSync);
       onClose();
     } catch (failure) { setError(failure.message); }
     finally { setSaving(false); }

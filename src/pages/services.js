@@ -2,6 +2,7 @@ import {useEffect, useState} from 'react';
 import useBaseUrl from '@docusaurus/useBaseUrl';
 import useDocusaurusContext from '@docusaurus/useDocusaurusContext';
 import Layout from '@theme/Layout';
+import {githubSaveNotice} from '@site/src/components/githubSaveNotice';
 import {serviceCategories, services as builtInServices} from '@site/src/data/services';
 import styles from './services.module.css';
 
@@ -109,11 +110,7 @@ export default function Services() {
   }
 
   function showSaveNotice(sync) {
-    setSaveNotice(sync?.status === 'synced'
-      ? 'Saved to the live catalog and GitHub. The website backup will update after deployment.'
-      : sync?.status === 'pending'
-        ? 'Saved to the live catalog. GitHub backup is pending; the server will retry automatically.'
-        : 'Saved to the live catalog. GitHub backup is not configured on the server.');
+    setSaveNotice(githubSaveNotice(sync));
   }
 
   async function addService(event) {

@@ -1,11 +1,13 @@
 import assert from 'node:assert/strict';
 import {spawn} from 'node:child_process';
-import {mkdtemp, readFile, readdir, rm, writeFile} from 'node:fs/promises';
+import {mkdir, mkdtemp, readFile, readdir, rm, writeFile} from 'node:fs/promises';
 import {createServer} from 'node:net';
 import {tmpdir} from 'node:os';
 import {join} from 'node:path';
 import {test} from 'node:test';
 import {fileURLToPath, pathToFileURL} from 'node:url';
+
+const seedCount = async (kind) => JSON.parse(await readFile(new URL(`./seed-${kind}.json`, import.meta.url), 'utf8')).length;
 
 async function freePort() {
   const server = createServer();
@@ -17,7 +19,7 @@ async function freePort() {
 
 async function start(port, dir, extraEnv = {}, preload) {
   const child = spawn(process.execPath, [...(preload ? ['--import', pathToFileURL(preload).href] : []), fileURLToPath(new URL('./server.mjs', import.meta.url))], {
-    env: {...process.env, GITHUB_SERVICES_SYNC: 'false', PORT: String(port), SERVICE_DATA_DIR: dir, RESOURCE_DATA_DIR: join(dir, 'resources'), REPORT_DATA_DIR: join(dir, 'reports'), MEDIA_DATA_DIR: join(dir, 'media'), LEGACY_SERVICE_FILE: join(dir, 'previous-catalog.json'), SITE_ORIGIN: 'http://localhost:3000', EDITOR_PASSWORD: 'test-password', ...extraEnv},
+    env: {...process.env, GITHUB_SERVICES_SYNC: 'false', GITHUB_CONTENT_SYNC: 'false', PORT: String(port), SERVICE_DATA_DIR: dir, RESOURCE_DATA_DIR: join(dir, 'resources'), REPORT_DATA_DIR: join(dir, 'reports'), MEDIA_DATA_DIR: join(dir, 'media'), LEGACY_SERVICE_FILE: join(dir, 'previous-catalog.json'), SITE_ORIGIN: 'http://localhost:3000', EDITOR_PASSWORD: 'test-password', ...extraEnv},
     stdio: 'pipe',
   });
   const base = `http://127.0.0.1:${port}`;
@@ -47,7 +49,7 @@ test('editor authorization, service creation, deletion, and persistence', async 
       body: JSON.stringify(body),
     });
     const initial = await (await fetch(`${server.base}/api/services`)).json();
-    assert.equal(initial.services.length, 9);
+    assert.equal(initial.services.length, await seedCount('services'));
     assert.equal((await request('/api/editor/verify', 'POST', {password: 'wrong'})).status, 403);
     const unlock = await request('/api/editor/verify', 'POST', {password: 'test-password'});
     assert.equal(unlock.status, 200);
@@ -63,12 +65,12 @@ test('editor authorization, service creation, deletion, and persistence', async 
     assert.equal((await request('/api/services', 'DELETE', {id: '../seed-services'}, token)).status, 400);
     assert.equal((await request('/api/services', 'DELETE', {id: 'missing'}, token)).status, 404);
     assert.equal((await fetch(`${server.base}/api/services`, {headers: {Origin: 'https://wrong.example'}})).status, 403);
-    assert.equal((await readdir(dir)).filter((name) => name.endsWith('.json')).length, 10);
+    assert.equal((await readdir(dir)).filter((name) => name.endsWith('.json')).length, initial.services.length + 1);
     assert.equal(JSON.parse(await readFile(join(dir, 'example-service.json'), 'utf8')).name, item.name);
     await stop(server.child);
     server = await start(port, dir);
     const reloaded = await (await fetch(`${server.base}/api/services`)).json();
-    assert.equal(reloaded.services.length, 10);
+    assert.equal(reloaded.services.length, initial.services.length + 1);
     assert.ok(reloaded.services.some((service) => service.name === item.name));
     const secondUnlock = await request('/api/editor/verify', 'POST', {password: 'test-password'});
     const secondToken = (await secondUnlock.json()).token;
@@ -151,8 +153,8 @@ test('resource and report editing, upload, and persistence', async () => {
     const base = server.base;
     const initialResources = await (await fetch(`${base}/api/resources`)).json();
     const initialReports = await (await fetch(`${base}/api/reports`)).json();
-    assert.equal(initialResources.resources.length, 59);
-    assert.equal(initialReports.reports.length, 2);
+    assert.equal(initialResources.resources.length, await seedCount('resources'));
+    assert.equal(initialReports.reports.length, await seedCount('reports'));
     const unlock = await fetch(`${base}/api/editor/verify`, {method: 'POST', headers: {'Content-Type': 'application/json'}, body: JSON.stringify({password: 'test-password'})});
     const {token} = await unlock.json();
     const json = (path, method, body) => fetch(`${base}${path}`, {method, headers: {'Content-Type': 'application/json', Authorization: `Bearer ${token}`}, body: JSON.stringify(body)});
@@ -179,6 +181,102 @@ test('resource and report editing, upload, and persistence', async () => {
     await stop(server.child);
     server = await start(port, dir);
     assert.ok((await (await fetch(`${base}/api/reports`)).json()).reports.some((item) => item.title === 'Test Report'));
+  } finally {
+    if (server && server.child.exitCode === null) await stop(server.child);
+    await rm(dir, {recursive: true, force: true});
+  }
+});
+
+test('resources and reports recover GitHub backups after restart, including media, edits and deletions', async () => {
+  const dir = await mkdtemp(join(tmpdir(), 'hub-content-github-'));
+  const remote = join(dir, 'mock-remote');
+  const mode = join(dir, 'mock-mode');
+  const preload = join(dir, 'mock-content-github.mjs');
+  await mkdir(remote);
+  await writeFile(mode, 'fail');
+  await writeFile(preload, `
+    import {mkdir, readFile, writeFile} from 'node:fs/promises';
+    import {dirname, join} from 'node:path';
+    import {createHash} from 'node:crypto';
+    const realFetch = globalThis.fetch;
+    globalThis.fetch = async (url, options) => {
+      if (!String(url).startsWith('https://api.github.com/')) return realFetch(url, options);
+      if ((await readFile(process.env.MOCK_MODE, 'utf8')) === 'fail') return Response.json({}, {status: 403});
+      const path = join(process.env.MOCK_REMOTE, new URL(url).pathname.split('/contents/')[1]);
+      if (!options.method) {
+        try {
+          const bytes = await readFile(path);
+          const sha = createHash('sha1').update('blob ' + bytes.length + '\\0').update(bytes).digest('hex');
+          return Response.json({sha, encoding: 'none', content: ''});
+        } catch { return Response.json({}, {status: 404}); }
+      }
+      await mkdir(dirname(path), {recursive: true});
+      await writeFile(path, Buffer.from(JSON.parse(options.body).content, 'base64'));
+      return Response.json({}, {status: 201});
+    };
+  `);
+  const env = {GITHUB_CONTENT_SYNC: 'true', GITHUB_REPOSITORY: 'test/hub', GITHUB_TOKEN: 'fake-token', MOCK_MODE: mode, MOCK_REMOTE: remote};
+  let server;
+  try {
+    server = await start(await freePort(), dir, env, preload);
+    const unlock = async () => (await (await fetch(`${server.base}/api/editor/verify`, {
+      method: 'POST', headers: {'Content-Type': 'application/json'}, body: JSON.stringify({password: 'test-password'}),
+    })).json()).token;
+    let token = await unlock();
+    const json = async (kind, method, body) => {
+      const response = await fetch(`${server.base}/api/${kind}`, {
+        method, headers: {'Content-Type': 'application/json', Authorization: `Bearer ${token}`}, body: JSON.stringify(body),
+      });
+      assert.ok(response.ok, await response.clone().text());
+      return response.json();
+    };
+    const upload = async (kind, name, mime, bytes) => {
+      const response = await fetch(`${server.base}/api/media?kind=${kind}&name=${name}`, {
+        method: 'POST', headers: {'Content-Type': mime, Authorization: `Bearer ${token}`}, body: bytes,
+      });
+      assert.equal(response.status, 201);
+      return (await response.json()).url;
+    };
+    const video = Buffer.from('000000186674797069736f6d', 'hex');
+    const html = '<!doctype html><h1>Offline report</h1>' + ' '.repeat(1_100_000);
+    const cover = Buffer.from('89504e470d0a1a0a', 'hex');
+    const videoFile = await upload('video', 'demo.mp4', 'video/mp4', video);
+    const htmlFile = await upload('html', 'report.html', 'text/html', html);
+    const coverImage = await upload('image', 'cover.png', 'image/png', cover);
+    const resource = {title: 'Backup Demo', category: 'demo', type: 'Developer coaching session', videoFile, tags: ['mysql-heatwave'], publishedAt: '2026-10-15'};
+    const report = {title: 'Backup Report', summary: 'Available when the VM is off.', htmlFile, coverImage, publishedAt: '2026-10-15'};
+    assert.equal((await json('resources', 'POST', resource)).githubSync.status, 'pending');
+    assert.equal((await json('reports', 'POST', report)).githubSync.status, 'pending');
+    await stop(server.child);
+    await writeFile(mode, 'ok');
+    server = await start(await freePort(), dir, env, preload);
+    token = await unlock();
+    const remoteCatalog = async (kind) => JSON.parse(await readFile(join(remote, 'backend', `seed-${kind}.json`), 'utf8'));
+    let backedUp;
+    for (let i = 0; i < 100; i++) {
+      try {
+        backedUp = (await remoteCatalog('reports')).find((item) => item.id === 'backup-report');
+        if (backedUp) break;
+      } catch { /* Startup sync is pending. */ }
+      await new Promise((resolve) => setTimeout(resolve, 25));
+    }
+    assert.equal(backedUp.htmlFile, `/uploads/${new URL(htmlFile, server.base).searchParams.get('file')}`);
+    assert.equal(await readFile(join(remote, 'static', backedUp.htmlFile), 'utf8'), html);
+    assert.ok((await readFile(join(remote, 'static', backedUp.coverImage))).equals(cover));
+    const backedUpResource = (await remoteCatalog('resources')).find((item) => item.id === 'backup-demo');
+    assert.ok((await readFile(join(remote, 'static', backedUpResource.videoFile))).equals(video));
+    // Live records still point to the VM; only the GitHub snapshots are rewritten.
+    const liveReport = (await (await fetch(`${server.base}/api/reports`)).json()).reports.find((item) => item.id === 'backup-report');
+    assert.equal(liveReport.htmlFile, htmlFile);
+    assert.equal(await (await fetch(`${server.base}${htmlFile}`)).text(), html);
+    assert.equal((await json('resources', 'PUT', {...resource, id: 'backup-demo', title: 'Renamed Backup Demo'})).githubSync.status, 'synced');
+    assert.equal((await remoteCatalog('resources')).find((item) => item.id === 'backup-demo').title, 'Renamed Backup Demo');
+    assert.equal((await json('reports', 'PUT', {...report, id: 'backup-report', summary: 'Updated summary.'})).githubSync.status, 'synced');
+    assert.equal((await remoteCatalog('reports')).find((item) => item.id === 'backup-report').summary, 'Updated summary.');
+    for (const [kind, id] of [['resources', 'backup-demo'], ['reports', 'backup-report']]) {
+      assert.equal((await json(kind, 'DELETE', {id})).githubSync.status, 'synced');
+      assert.ok(!(await remoteCatalog(kind)).some((item) => item.id === id));
+    }
   } finally {
     if (server && server.child.exitCode === null) await stop(server.child);
     await rm(dir, {recursive: true, force: true});

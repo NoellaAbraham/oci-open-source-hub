@@ -5,6 +5,7 @@ import {dirname, join, resolve} from 'node:path';
 import {homedir} from 'node:os';
 import {fileURLToPath} from 'node:url';
 import {createServiceGithubSync} from './github-services.mjs';
+import {createCollectionGithubSync} from './github-content.mjs';
 
 const root = dirname(fileURLToPath(import.meta.url));
 const dataDir = resolve(process.env.SERVICE_DATA_DIR || join(root, 'data', 'services'));
@@ -23,6 +24,13 @@ const githubServices = createServiceGithubSync({
   token: process.env.GITHUB_TOKEN,
 });
 let githubSyncPending = githubServices.enabled;
+const githubContent = createCollectionGithubSync({
+  enabled: (process.env.GITHUB_CONTENT_SYNC ?? process.env.GITHUB_SERVICES_SYNC) === 'true',
+  repository: process.env.GITHUB_REPOSITORY,
+  branch: process.env.GITHUB_BRANCH || 'main',
+  token: process.env.GITHUB_TOKEN,
+});
+const contentSyncPending = new Set(githubContent.enabled ? ['resources', 'reports'] : []);
 const sessions = new Map();
 const loginAttempts = new Map();
 const sessionLifetime = 8 * 60 * 60 * 1000;
@@ -251,6 +259,25 @@ async function changeServiceAndSync(change) {
   return {...result, githubSync: await syncServicesToGithub()};
 }
 
+async function syncContentToGithub(kind) {
+  if (!githubContent.enabled) return {status: 'disabled'};
+  contentSyncPending.add(kind);
+  try {
+    const result = await githubContent.sync(kind, await listCollection(kind), (filename) => readFile(join(mediaDir, filename)));
+    contentSyncPending.delete(kind);
+    return result;
+  } catch {
+    console.error(`${kind} saved on VM; GitHub sync pending. Check credentials, permissions, media files and network access.`);
+    return {status: 'pending'};
+  }
+}
+
+async function changeContentAndSync(kind, change) {
+  const result = await change();
+  if (result.error) return result;
+  return {...result, githubSync: await syncContentToGithub(kind)};
+}
+
 async function readJson(request) {
   if (!String(request.headers['content-type'] || '').startsWith('application/json')) throw new Error('Expected JSON.');
   const chunks = [];
@@ -409,10 +436,12 @@ async function handler(request, response) {
   if (collection && ['POST', 'PUT', 'DELETE'].includes(request.method)) {
     if (!authorized(request)) return send(request, response, 401, {error: 'Unlock the editor first.'});
     const value = await readJson(request);
-    const result = await (writes = writes.catch(() => {}).then(() => request.method === 'DELETE'
-      ? deleteCollection(collection, value) : saveCollection(collection, request.method, value)));
+    const result = await (writes = writes.catch(() => {}).then(() => changeContentAndSync(collection, () => request.method === 'DELETE'
+      ? deleteCollection(collection, value) : saveCollection(collection, request.method, value))));
     if (result.error) return send(request, response, result.status, {error: result.error});
-    return send(request, response, result.status, request.method === 'DELETE' ? {deleted: result.id} : {[collection.slice(0, -1)]: result.item});
+    return send(request, response, result.status, request.method === 'DELETE'
+      ? {deleted: result.id, githubSync: result.githubSync}
+      : {[collection.slice(0, -1)]: result.item, githubSync: result.githubSync});
   }
   if (request.method === 'POST' && path === '/api/media') {
     if (!authorized(request)) return send(request, response, 401, {error: 'Unlock the editor first.'});
@@ -428,9 +457,12 @@ createServer((request, response) => handler(request, response).catch((error) => 
 
 // Retry failed syncs and reconcile existing VM data on startup. Use the same
 // queue as editor writes so a retry cannot publish an older service snapshot.
-if (githubServices.enabled) {
+if (githubServices.enabled || githubContent.enabled) {
   const retryGithub = () => {
-    writes = writes.catch(() => {}).then(() => githubSyncPending ? syncServicesToGithub() : undefined);
+    writes = writes.catch(() => {}).then(async () => {
+      if (githubSyncPending) await syncServicesToGithub();
+      for (const kind of [...contentSyncPending]) await syncContentToGithub(kind);
+    });
   };
   retryGithub();
   setInterval(retryGithub, 60_000).unref();

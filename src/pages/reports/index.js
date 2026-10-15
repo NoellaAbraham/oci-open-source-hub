@@ -3,6 +3,7 @@ import useBaseUrl from '@docusaurus/useBaseUrl';
 import useDocusaurusContext from '@docusaurus/useDocusaurusContext';
 import Layout from '@theme/Layout';
 import VmCatalogEditor from '@site/src/components/VmCatalogEditor';
+import {githubSaveNotice} from '@site/src/components/githubSaveNotice';
 import {reports as builtInReports} from '@site/src/data/reports';
 import styles from './index.module.css';
 
@@ -12,6 +13,7 @@ export default function ReportsPage() {
   const baseUrl = useBaseUrl('/');
   const [reports, setReports] = useState(builtInReports);
   const [catalogError, setCatalogError] = useState('');
+  const [saveNotice, setSaveNotice] = useState('');
   const [apiReady, setApiReady] = useState(false);
   const [editorOpen, setEditorOpen] = useState(false);
 
@@ -45,6 +47,7 @@ export default function ReportsPage() {
       </header>
       <section className={styles.list} aria-label="Available reports">
         {catalogError && <p className={styles.notice} role="status">{catalogError}</p>}
+        {saveNotice && <p className={styles.notice} role="status">{saveNotice}</p>}
         {reports.map((report) => {
           const readOnlineHref = href(report.htmlFile || report.readOnlinePath);
           const coverImage = href(report.coverImage);
@@ -70,7 +73,7 @@ export default function ReportsPage() {
           </article>;
         })}
       </section>
-      {editorOpen && <VmCatalogEditor kind="reports" apiUrl={apiUrl} items={reports} onSaved={loadReports} onClose={() => setEditorOpen(false)} />}
+      {editorOpen && <VmCatalogEditor kind="reports" apiUrl={apiUrl} items={reports} onSaved={async (sync) => {setSaveNotice(githubSaveNotice(sync)); await loadReports();}} onClose={() => setEditorOpen(false)} />}
     </main>
   </Layout>;
 }
