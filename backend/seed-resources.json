@@ -1,5 +1,21 @@
 [
   {
+    "id": "mysql-heatwave-dbconsole",
+    "title": "MySQL HeatWave - DBConsole",
+    "category": "github",
+    "type": "Github Repository",
+    "creator": "Ivan Ma",
+    "description": "DBConsole is a Flask web console for MySQL administration, SQL workspaces, monitoring, MySQL Shell dump/load operations, HeatWave workflows, and OCI Object Storage integration.",
+    "url": "https://github.com/ivanxma/mysqlconsole",
+    "videoUrl": "",
+    "videoFile": "",
+    "tags": [
+      "mysql-heatwave"
+    ],
+    "publishedAt": "2026-09-30",
+    "updatedAt": ""
+  },
+  {
     "id": "article-postgresql-time-series-node",
     "title": "Setting Up a Time-Series Node for OCI Database with PostgreSQL",
     "category": "article",
