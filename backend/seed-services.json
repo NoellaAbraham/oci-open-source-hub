@@ -80,13 +80,5 @@
     "description": "Build real-time data pipelines with fully managed Apache Kafka on OCI.",
     "url": "https://www.oracle.com/cloud/apache-kafka/",
     "image": "/img/services/apache-kafka.png"
-  },
-  {
-    "name": "test123",
-    "categories": [
-      "search"
-    ],
-    "description": "widhwoqndw djqpjdqpds 2oqjdpqjds please work i beg",
-    "image": "/img/services/oci-cache.png"
   }
 ]
