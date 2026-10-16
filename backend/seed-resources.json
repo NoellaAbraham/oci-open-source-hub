@@ -2,7 +2,7 @@
   {
     "id": "valkey-pubsub-across-regions-using-oci-cache",
     "title": "Valkey PubSub across Regions using OCI Cache",
-    "category": "demo",
+    "category": "article",
     "type": "Demo",
     "creator": "Bob Peulen",
     "description": "A guide to cross-region Valkey Pub/Sub messaging using OCI Cache.",
