@@ -1,5 +1,21 @@
 [
   {
+    "id": "valkey-pubsub-across-regions-using-oci-cache",
+    "title": "Valkey PubSub across Regions using OCI Cache",
+    "category": "demo",
+    "type": "Demo",
+    "creator": "Bob Peulen",
+    "description": "A guide to cross-region Valkey Pub/Sub messaging using OCI Cache.",
+    "url": "https://medium.com/@peulenbob/valkey-pubsub-across-regions-using-oci-cache-e30f99a5c0a7",
+    "videoUrl": "",
+    "videoFile": "",
+    "tags": [
+      "oci-cache"
+    ],
+    "publishedAt": "2026-10-16",
+    "updatedAt": ""
+  },
+  {
     "id": "mysql-heatwave-dbconsole",
     "title": "MySQL HeatWave - DBConsole",
     "category": "github",
