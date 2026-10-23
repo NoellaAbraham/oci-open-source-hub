@@ -50,7 +50,7 @@
       "databases"
     ],
     "description": "Store flexible data and scale high-throughput applications with managed NoSQL.",
-    "url": "https://www.oracle.com/database/nosql/",
+    "url": "https://phantompete.github.io/OCINoSQLShowcase/",
     "image": "/img/services/NoSQL-Database.svg"
   },
   {
