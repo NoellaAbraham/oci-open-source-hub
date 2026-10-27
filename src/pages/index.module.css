@@ -284,64 +284,9 @@
   width: min(100%, 1320px);
   margin: 0 auto;
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 2rem;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 1.25rem;
 }
-
-.highlightCard {
-  min-height: 220px;
-  padding: 1.75rem 1.5rem;
-  display: flex;
-  flex-direction: column;
-  border: 1px solid var(--site-border);
-  transition: border-color 180ms ease, transform 180ms ease;
-}
-
-.highlightCard:hover { border-color: var(--oci-terracotta); transform: translateY(-3px); }
-
-.highlightTopline {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 1rem;
-  color: var(--site-muted);
-  font-size: 0.78rem;
-}
-
-.highlightMeta::before {
-  content: '';
-  width: 0.45rem;
-  height: 0.45rem;
-  margin-right: 0.45rem;
-  display: inline-block;
-  border-radius: 50%;
-  background: var(--oci-terracotta);
-}
-
-.highlightCard h3 {
-  margin: 1.4rem 0 1.25rem;
-  color: var(--site-text);
-  font-size: 1.2rem;
-  line-height: 1.25;
-}
-
-.highlightCard p {
-  margin: 0;
-  color: var(--site-muted);
-  font-size: 0.95rem;
-  line-height: 1.5;
-}
-
-.highlightLink {
-  margin-top: auto;
-  padding-top: 1.5rem;
-  color: var(--site-text);
-  font-size: 0.85rem;
-  font-weight: 700;
-  text-decoration: none;
-}
-
-a.highlightLink:hover { color: var(--oci-terracotta); text-decoration: none; }
 
 .reportSection {
   padding: clamp(3rem, 5vw, 5rem) clamp(1.5rem, 4vw, 5rem);

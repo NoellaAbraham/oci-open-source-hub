@@ -7,6 +7,7 @@ import {coachingSessions as builtInSessions} from '@site/src/data/coachingSessio
 import {openSourceHighlights} from '@site/src/data/openSourceHighlights';
 import {reports as builtInReports} from '@site/src/data/reports';
 import styles from './index.module.css';
+import resourceStyles from './demos-resources.module.css';
 
 export default function Home() {
   const {siteConfig} = useDocusaurusContext();
@@ -114,23 +115,21 @@ export default function Home() {
             </Link>
           </div>
           <div className={styles.highlightsGrid}>
-            {featuredHighlights.map((highlight) => (
-              <article className={styles.highlightCard} data-tags={highlight.tags.join(' ')} key={highlight.id}>
-                <div className={styles.highlightTopline}>
-                  <span>{highlight.type}</span>
-                  <span className={styles.highlightMeta}>{highlight.meta}</span>
+            {featuredHighlights.map((highlight) => {
+              const Card = highlight.url ? 'a' : 'article';
+              return <Card className={resourceStyles.card} data-tags={highlight.tags.join(' ')} key={highlight.id}
+                {...(highlight.url ? {href: highlight.url, target: '_blank', rel: 'noopener noreferrer'} : {})}>
+                <div className={resourceStyles.cardContent}>
+                  <div className={resourceStyles.cardTopline}>{highlight.type}</div>
+                  <h3>{highlight.title}</h3>
+                  <div className={resourceStyles.cardDetails}>
+                    <p>{highlight.description}</p>
+                  </div>
+                  <span className={resourceStyles.serviceTag} title={highlight.meta}>{highlight.meta}</span>
+                  {highlight.url && <span className={resourceStyles.srOnly}>Opens in a new tab</span>}
                 </div>
-                <h3>{highlight.title}</h3>
-                <p>{highlight.description}</p>
-                {highlight.url ? (
-                  <a className={styles.highlightLink} href={highlight.url} target="_blank" rel="noreferrer">
-                    Explore <span aria-hidden="true">&#8594;</span>
-                  </a>
-                ) : (
-                  <span className={styles.highlightLink}>Explore <span aria-hidden="true">&#8594;</span></span>
-                )}
-              </article>
-            ))}
+              </Card>;
+            })}
           </div>
         </section>
         {latestReport && <section className={styles.reportSection}>

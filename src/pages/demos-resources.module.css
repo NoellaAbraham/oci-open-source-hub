@@ -28,8 +28,8 @@
 .cardTopline { min-height: 1rem; color: var(--site-muted); font-size: 0.76rem; line-height: 1rem; text-transform: capitalize; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 .serviceTag { display: -webkit-box; overflow: hidden; -webkit-line-clamp: 2; -webkit-box-orient: vertical; color: var(--site-muted); font-size: 0.76rem; line-height: 1.3; }
 .serviceTag::before { content: ''; width: 0.45rem; height: 0.45rem; margin-right: 0.45rem; display: inline-block; border-radius: 50%; background: var(--oci-terracotta); }
-.card h2 { height: 2.7rem; flex: 0 0 2.7rem; margin: 0.25rem 0 0; display: -webkit-box; overflow: hidden; -webkit-line-clamp: 2; -webkit-box-orient: vertical; color: var(--site-text); font-size: 1.1rem; line-height: 1.23; }
-.card:hover h2, .card:focus-visible h2 { color: var(--oci-terracotta); }
+.card h2, .card h3 { height: 2.7rem; flex: 0 0 2.7rem; margin: 0.25rem 0 0; display: -webkit-box; overflow: hidden; -webkit-line-clamp: 2; -webkit-box-orient: vertical; color: var(--site-text); font-size: 1.1rem; line-height: 1.23; }
+.card:hover h2, .card:focus-visible h2, .card:hover h3, .card:focus-visible h3 { color: var(--oci-terracotta); }
 .cardDetails { min-height: 0; display: flex; flex-direction: column; gap: 0.25rem; }
 .card p { margin: 0; display: -webkit-box; overflow: hidden; -webkit-line-clamp: 2; -webkit-box-orient: vertical; color: var(--site-muted); font-size: 0.9rem; line-height: 1.45; }
 .card .creator { font-size: 0.82rem; line-height: 1.35; }
