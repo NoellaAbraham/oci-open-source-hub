@@ -54,3 +54,8 @@ npm run start
 Open the local address printed by Docusaurus. The project uses the `/oci-open-source-hub/` base path. To check a production build, run `npm run build`; to preview that build locally, run `npm run serve`.
 
 The local site works as a browsing preview with built-in catalog data. Live editing needs the separately hosted content service and editor access.
+
+
+
+### Disclaimer
+Disclaimer: The materials in this repository are provided for educational purposes only and do not constitute official Oracle documentation.

@@ -123,7 +123,7 @@ const config = {
             ],
           },
         ],
-        copyright: 'Copyright © 2026 Oracle Corporation · <a href="https://www.google.com/search?sca_esv=918fcbc529497425&rlz=1C1GCEA_en__1197AE1197&sxsrf=APpeQnvvz8wob1LPlxgkgSSlYv8GznKtKg:1790154874630&q=Austin,+Texas&si=APenkKl9jifxeC9ibQ_x4MSQwI5Umgo7WEBmeB2VLefJQEpIweKlLGDwuMq5vkXaLEdVe3Fs-UvTka9YOTdB_lXi9WPanukOe0J5lLkoOIbm1SXD1Q8Fo97oZN0Yb3vN4ftnVa5_Yamkr8KfrVDFx6-pBuithim-upI04YoYHHN753P4rMIaT1fMw5Hw2OFGfD7sdmXrx613&sa=X&ved=2ahUKEwjVo5TLroSXAxUS0gIHHeEqFHEQmxN6BAgeEAI" target="_blank" rel="noreferrer">Austin, Texas, United States</a>',
+        copyright: 'The materials in this repository are provided for educational purposes only and do not constitute official Oracle documentation. - Copyright © 2026 Oracle Corporation · <a href="https://www.google.com/search?sca_esv=918fcbc529497425&rlz=1C1GCEA_en__1197AE1197&sxsrf=APpeQnvvz8wob1LPlxgkgSSlYv8GznKtKg:1790154874630&q=Austin,+Texas&si=APenkKl9jifxeC9ibQ_x4MSQwI5Umgo7WEBmeB2VLefJQEpIweKlLGDwuMq5vkXaLEdVe3Fs-UvTka9YOTdB_lXi9WPanukOe0J5lLkoOIbm1SXD1Q8Fo97oZN0Yb3vN4ftnVa5_Yamkr8KfrVDFx6-pBuithim-upI04YoYHHN753P4rMIaT1fMw5Hw2OFGfD7sdmXrx613&sa=X&ved=2ahUKEwjVo5TLroSXAxUS0gIHHeEqFHEQmxN6BAgeEAI" target="_blank" rel="noreferrer">Austin, Texas, United States</a>',
       },
       prism: {
         theme: prismThemes.github,
